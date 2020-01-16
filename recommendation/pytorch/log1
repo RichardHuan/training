@@ -1,0 +1,72 @@
+ubuntu@ip-172-31-46-17:~/training/recommendation/pytorch$ sudo nvidia-docker run -i -t --rm --ipc=host  --mount "type=bind,source=$(pwd),destination=/mlperf/experiment" mlperf/recommendation:v0.5 3
+STARTING TIMING RUN AT 2020-01-16 06:47:50 AM
+unzip ml-20m.zip
+Archive:  ml-20m.zip
+replace ml-20m/genome-scores.csv? [y]es, [n]o, [A]ll, [N]one, [r]ename: N
+Start processing ml-20m/ratings.csv
+Loading raw data from ml-20m/ratings.csv
+20000263 ratings on 26744 items from 138493 users from 1995-01-09 11:46:44 to 2015-03-31 06:40:02
+Filtering out users with less than 20 ratings
+Mapping original user and item IDs to new sequential IDs
+Creating list of items for each user
+Ratings: 100%|#########################################| 20000263/20000263 [01:42<00:00, 196059.44it/s]
+Generating 999 negative samples for each user
+Users:  11%|#####7                                             | 15546/138493 [00:41<05:27, 375.70it/s]
+Users:  11%|#####7                                             | 15661/138493 [00:41<05:26, 375.70it/s]
+Users:  11%|#####7                                             | 15737/138493 [00:41<05:26, 375.71it/s]
+Users:  11%|#####8                                             | 15775/138493 [00:41<05:26, 375.71it/s]
+Users:  12%|######1                                            | 16611/138493 [00:44<05:24, 375.76it/s]Users:  12%|######1                                            | 16687/138493 [00:44<05:24, 375.71it/s]U
+sers:  12%|######2                                            | 16839/138493 [00:44<05:23, 375.73it/s]Users: 100%|##################################################| 138493/138493 [06:11<00:00, 373.22it/s]
+Saving train and test CSV files to ml-20m
+Finish processing ml-20m/ratings.csv in 887 seconds
+Start training
+Using seed = 3
+Saving config and results to ./run/neumf/1579158166
+Loading data
+Load data done [215.9 s]. #user=138493, #item=26744, #train=19861770, #test=138493
+NeuMF(
+  (mf_user_embed): Embedding(138493, 64)
+  (mf_item_embed): Embedding(26744, 64)
+  (mlp_user_embed): Embedding(138493, 128)
+  (mlp_item_embed): Embedding(26744, 128)
+  (mlp): ModuleList(
+    (0): Linear(in_features=256, out_features=256, bias=True)
+    (1): Linear(in_features=256, out_features=128, bias=True)
+    (2): Linear(in_features=128, out_features=64, bias=True)
+  )
+  (final): Linear(in_features=128, out_features=1, bias=True)
+)
+31832577 parameters
+Initial evaluation
+Initial HR@10 = 0.0100, NDCG@10 = 0.0043
+Epoch 0 Loss 0.1351 (0.1464): 100%|#############################| 48491/48491 [06:00<00:00, 134.45it/s]
+Epoch 0 evaluation
+Epoch 0: HR@10 = 0.5732, NDCG@10 = 0.3362, train_time = 360.67, val_time = 64.05
+Epoch 1 Loss 0.1107 (0.1168): 100%|#############################| 48491/48491 [05:57<00:00, 135.50it/s]
+Epoch 1 evaluation
+Epoch 1: HR@10 = 0.6044, NDCG@10 = 0.3565, train_time = 357.88, val_time = 64.06
+Epoch 2 Loss 0.1027 (0.1080): 100%|#############################| 48491/48491 [06:02<00:00, 133.77it/s]
+Epoch 2 evaluation
+Epoch 2: HR@10 = 0.6187, NDCG@10 = 0.3666, train_time = 362.49, val_time = 67.99
+Epoch 3 Loss 0.1002 (0.1026): 100%|#############################| 48491/48491 [05:57<00:00, 135.81it/s]
+Epoch 3 evaluation
+Epoch 3: HR@10 = 0.6272, NDCG@10 = 0.3754, train_time = 357.05, val_time = 64.89
+Epoch 4 Loss 0.0855 (0.0991): 100%|#############################| 48491/48491 [05:57<00:00, 135.50it/s]
+Epoch 4 evaluation
+Epoch 4: HR@10 = 0.6305, NDCG@10 = 0.3783, train_time = 357.88, val_time = 64.55
+Epoch 5 Loss 0.1058 (0.0963): 100%|#############################| 48491/48491 [05:56<00:00, 136.13it/s]
+Epoch 5 evaluation
+Epoch 5: HR@10 = 0.6313, NDCG@10 = 0.3783, train_time = 356.20, val_time = 64.25
+Epoch 6 Loss 0.1163 (0.0941): 100%|#############################| 48491/48491 [05:56<00:00, 136.10it/s]
+Epoch 6 evaluation
+Epoch 6: HR@10 = 0.6327, NDCG@10 = 0.3790, train_time = 356.30, val_time = 64.26
+Epoch 7 Loss 0.1090 (0.0923): 100%|#############################| 48491/48491 [05:57<00:00, 135.57it/s]
+Epoch 7 evaluation
+Epoch 7: HR@10 = 0.6370, NDCG@10 = 0.3832, train_time = 357.67, val_time = 64.34
+Hit threshold of 0.635
+Finish training in 3683 seconds
+ENDING TIMING RUN AT 2020-01-16 08:04:07 AM
+RESULT,recommendation,3,4577,,2020-01-16 06:47:50 AM
+
+
+
