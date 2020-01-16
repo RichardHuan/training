@@ -11,7 +11,7 @@ BASEDIR=$(dirname -- "$0")
 # start timing
 start=$(date +%s)
 start_fmt=$(date +%Y-%m-%d\ %r)
-echo "STARTING TIMING RUN AT $start_fmt"
+echo "STARTING TIMING RUN AAT $start_fmt"
 
 # Get command line seed
 seed=${1:-1}
@@ -28,6 +28,7 @@ then
 
     echo "Start training"
     t0=$(date +%s)
+  # SSY --layers is the size of each intermediate lenear layer in ModuleList
 	python $BASEDIR/ncf.py ml-20m -l 0.0005 -b 2048 --layers 256 256 128 64 -f 64 \
 		--seed $seed --threshold $THRESHOLD --processes 10
     t1=$(date +%s)
