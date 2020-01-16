@@ -1,0 +1,67 @@
+STARTING TIMING RUN AT 2020-01-16 08:15:56 AM
+unzip ml-20m.zip
+Archive:  ml-20m.zip
+replace ml-20m/genome-scores.csv? [y]es, [n]o, [A]ll, [N]one, [r]ename: N
+Start processing ml-20m/ratings.csv
+Loading raw data from ml-20m/ratings.csv
+20000263 ratings on 26744 items from 138493 users from 1995-01-09 11:46:44 to 2015-03-31 06:40:02
+Filtering out users with less than 20 ratings
+Mapping original user and item IDs to new sequential IDs
+Creating list of items for each user
+Ratings: 100% 20000263/20000263 [01:39<00:00, 200967.38it/s]
+Generating 999 negative samples for each user
+Users: 100% 138493/138493 [06:09<00:00, 375.07it/s]
+Saving train and test CSV files to ml-20m
+Finish processing ml-20m/ratings.csv in 875 seconds
+Start training
+Using seed = 3
+Saving config and results to ./run/neumf/1579163440
+Loading data
+Load data done [220.9 s]. #user=138493, #item=26744, #train=19861770, #test=138493
+NeuMF(
+  (mf_user_embed): Embedding(138493, 64)
+  (mf_item_embed): Embedding(26744, 64)
+  (mlp_user_embed): Embedding(138493, 128)
+  (mlp_item_embed): Embedding(26744, 128)
+  (mlp): ModuleList(
+    (0): Linear(in_features=256, out_features=256, bias=True)
+    (1): Linear(in_features=256, out_features=128, bias=True)
+    (2): Linear(in_features=128, out_features=64, bias=True)
+  )
+  (final): Linear(in_features=128, out_features=1, bias=True)
+)
+31832577 parameters
+Initial evaluation
+Initial HR@10 = 0.0100, NDCG@10 = 0.0043
+Epoch 0 Loss 0.1351 (0.1464): 100% 48491/48491 [05:56<00:00, 135.85it/s]
+Epoch 0 evaluation
+Epoch 0: HR@10 = 0.5732, NDCG@10 = 0.3362, train_time = 356.96, val_time = 64.24
+Epoch 1 Loss 0.1107 (0.1168): 100% 48491/48491 [05:54<00:00, 136.85it/s]
+Epoch 1 evaluation
+
+
+
+Epoch 1: HR@10 = 0.6044, NDCG@10 = 0.3565, train_time = 354.34, val_time = 64.16
+Epoch 2 Loss 0.1027 (0.1080): 100% 48491/48491 [05:55<00:00, 136.27it/s]
+Epoch 2 evaluation
+Epoch 2: HR@10 = 0.6187, NDCG@10 = 0.3666, train_time = 355.84, val_time = 68.52
+Epoch 3 Loss 0.1002 (0.1026): 100% 48491/48491 [05:54<00:00, 136.77it/s]
+Epoch 3 evaluation
+Epoch 3: HR@10 = 0.6272, NDCG@10 = 0.3754, train_time = 354.55, val_time = 64.32
+Epoch 4 Loss 0.0855 (0.0991): 100% 48491/48491 [05:55<00:00, 136.37it/s]
+Epoch 4 evaluation
+Epoch 4: HR@10 = 0.6305, NDCG@10 = 0.3783, train_time = 355.59, val_time = 64.18
+Epoch 5 Loss 0.1058 (0.0963): 100% 48491/48491 [05:56<00:00, 135.89it/s]
+Epoch 5 evaluation
+Epoch 5: HR@10 = 0.6313, NDCG@10 = 0.3783, train_time = 356.85, val_time = 64.17
+Epoch 6 Loss 0.1163 (0.0941): 100% 48491/48491 [05:54<00:00, 136.75it/s]
+Epoch 6 evaluation
+Epoch 6: HR@10 = 0.6327, NDCG@10 = 0.3790, train_time = 354.60, val_time = 64.19
+Epoch 7 Loss 0.1090 (0.0923): 100% 48491/48491 [05:56<00:00, 136.09it/s]
+Epoch 7 evaluation
+Epoch 7: HR@10 = 0.6370, NDCG@10 = 0.3832, train_time = 356.32, val_time = 64.44
+Hit threshold of 0.635
+Finish training in 3664 seconds
+ENDING TIMING RUN AT 2020-01-16 09:31:43 AM
+RESULT,recommendation,3,4547,,2020-01-16 08:15:56 AM
+
