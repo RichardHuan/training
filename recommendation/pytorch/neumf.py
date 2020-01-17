@@ -54,6 +54,7 @@ class NeuMF(nn.Module):
         lecunn_uniform(self.final)
 
     def forward(self, user, item, sigmoid=False):
+        #print("ssy forward NeuMF")
         xmfu = self.mf_user_embed(user)
         xmfi = self.mf_item_embed(item)
         xmf = xmfu * xmfi
