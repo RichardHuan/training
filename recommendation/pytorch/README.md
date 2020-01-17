@@ -1,3 +1,21 @@
+# SSY 
+
+### Steps to download and verify data
+
+You can download and verify the dataset by running the `download_dataset.sh` and `verify_dataset.sh` scripts in the parent directory:
+
+3. Get the docker image for the recommendation task
+
+```bash
+# Pull from Docker Hub
+docker pull mlperf/recommendation:v0.5
+# but this image need to be modified to use bf16
+# refer to start.sh to how to create a new container ssyNCF 
+
+# and then I need to modified ~/.pyenv/versions/anaconda3-5.0.1/lib/python3.6/site-packages/torch/nn/functional.py
+# to insert my bf16
+
+
 # 1. Problem
 This task benchmarks recommendation with implicit feedback on the [MovieLens 20 Million (ml-20m) dataset](https://grouplens.org/datasets/movielens/20m/) with a [Neural Collaborative Filtering](http://dl.acm.org/citation.cfm?id=3052569) model.
 The model trains on binary information about whether or not a user interacted with a specific item.
