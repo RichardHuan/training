@@ -22,6 +22,8 @@ RUN pyenv global anaconda3-5.0.1
 
 # Install PyTorch Requirements
 ENV CMAKE_PREFIX_PATH "$(dirname $(which conda))/../"
+RUN conda install anaconda
+RUN conda update --all
 RUN conda install -y numpy pyyaml mkl mkl-include setuptools cmake cffi typing
 RUN conda install -c pytorch -y magma-cuda90
 
@@ -41,4 +43,6 @@ WORKDIR /mlperf/ncf
 ADD . /mlperf/ncf
 RUN pip install -r requirements.txt
 WORKDIR /mlperf/experiment
-ENTRYPOINT ["/mlperf/ncf/run_and_time.sh"]
+# SSY prevent it from automatically run this
+# I still want to turn the float 32 to bfloat 16
+#ENTRYPOINT ["/mlperf/ncf/run_and_time.sh"]
