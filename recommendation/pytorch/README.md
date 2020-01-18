@@ -14,6 +14,19 @@ docker pull mlperf/recommendation:v0.5
 
 # and then I need to modified ~/.pyenv/versions/anaconda3-5.0.1/lib/python3.6/site-packages/torch/nn/functional.py
 # to insert my bf16
+# in host
+ncf.py
+neumf.py
+# in docker
+~/github/pytorch/torch/nn/modules/linear.py   
+   def forward(self, input):
+        return F.linear(input, self.weight, self.bias)
+~/github/pytorch/torch/nn/functional.py  F.linear function is defined here, and it call addmm
+~/github/pytorch/torch/nn/modules/module.py   : to_half function defined here, but I still have  NOT figure out where is backward defined
+
+
+
+
 
 
 # 1. Problem
