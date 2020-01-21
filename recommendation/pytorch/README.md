@@ -24,6 +24,9 @@ neumf.py
    def forward(self, input):
         return F.linear(input, self.weight, self.bias)
 ~/github/pytorch/torch/nn/functional.py  F.linear function is defined here, and it call addmm
+~/github/pytorch/aten/src/THC/generic/THCTensorMathBlas.cu this is addmm
+~/github/pytorch/aten/src/THC/THCBlas.cu
+
 ~/github/pytorch/torch/nn/modules/module.py   : to_half function defined here, but I still have  NOT figure out where is backward defined
 
 

@@ -1,9 +1,38 @@
 import numpy as np
 import torch
 import torch.nn as nn
+# SSY
+import torch.autograd
+from torch.autograd import Function
 
 from mlperf_compliance import mlperf_log
 
+# SSY
+def float2bf16(xmlp):
+        ssign=torch.sign(xmlp)
+        aabs=torch.abs(xmlp)
+        a=torch.log2(aabs)
+        b_exp=torch.floor(a) # exp value
+        rnd2exp=torch.pow(2,b_exp) # get back the old value rounded to 2 exp
+        mantis=torch.div(xmlp,rnd2exp) # mantis
+        m256=torch.mul(mantis,256)
+        f256=torch.floor(m256)
+        d256=torch.div(f256,256)
+        res=torch.mul(d256,rnd2exp)
+        return torch.mul(res,ssign)
+
+class bf16cut(Function):
+    @staticmethod
+    def forward(ctx, tensor):
+        # ctx is a context object that can be used to stash information
+        # for backward computation
+        return float2bf16(tensor)
+
+    @staticmethod
+    def backward(ctx, grad_output):
+        # We return as many input gradients as there were arguments.
+        # Gradients of non-Tensor arguments to forward must be None.
+        return grad_output
 
 class NeuMF(nn.Module):
     def __init__(self, nb_users, nb_items,
@@ -63,6 +92,9 @@ class NeuMF(nn.Module):
         xmlpi = self.mlp_item_embed(item)
         xmlp = torch.cat((xmlpu, xmlpi), dim=1)
         for i, layer in enumerate(self.mlp):
+            # SSY can not use it this way, because every operation is recorded to generate derivation
+            # but our trick to convert float32 to bf16 is not derivable
+            xmlp = bf16cut.apply(xmlp)
             xmlp = layer(xmlp)
             xmlp = nn.functional.relu(xmlp)
 
