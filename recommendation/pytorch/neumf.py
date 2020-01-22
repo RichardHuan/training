@@ -32,7 +32,8 @@ class bf16cut(Function):
     def backward(ctx, grad_output):
         # We return as many input gradients as there were arguments.
         # Gradients of non-Tensor arguments to forward must be None.
-        return grad_output
+        #return grad_output
+        return float2bf16(grad_output)
 
 class NeuMF(nn.Module):
     def __init__(self, nb_users, nb_items,
