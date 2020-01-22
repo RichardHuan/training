@@ -5,5 +5,5 @@ set -e
 
 SEED=$1
 mkdir -p /research/results/minigo/final/
-cd /research/reinforcement/minigo
+cd /research/reinforcement/tensorflow/minigo
 bash loop_main.sh params/final.json $SEED
