@@ -14,7 +14,7 @@ def float2bf16(xmlp):
         a=torch.log2(aabs)
         b_exp=torch.floor(a) # exp value
         rnd2exp=torch.pow(2,b_exp) # get back the old value rounded to 2 exp
-        mantis=torch.div(xmlp,rnd2exp) # mantis
+        mantis=torch.div(aabs,rnd2exp) # mantis
         m256=torch.mul(mantis,256)
         f256=torch.floor(m256)
         d256=torch.div(f256,256)
