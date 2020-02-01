@@ -1,5 +1,5 @@
-grep ^accuracy l1 > a1
-grep ^accuracy l2 > a2
+#grep ^accuracy l1 > a1
+#grep ^accuracy l2 > a2
 grep ^accuracy l5 > a5
 grep ^accuracy l6 > a6
 

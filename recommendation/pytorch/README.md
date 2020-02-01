@@ -12,9 +12,12 @@ docker pull mlperf/recommendation:v0.5
 # but this image need to be modified to use bf16
 # refer to start.sh to how to create a new container ssyNCF 
 
-# and then I need to modified ~/.pyenv/versions/anaconda3-5.0.1/lib/python3.6/site-packages/torch/nn/functional.py
+# this is the real running script
+run_and_time.sh 3|tee lxx
+
 # to insert my bf16
 # and then try run this
+# only for trying fastly
 python ncf.py ml-20m -l 0.0005 -b 2048 --layers 256 256 128 64 -f 64 --seed 3 --threshold 0.635
 # in host
 ncf.py

@@ -1,6 +1,6 @@
 {
 "MAX_GAMES_PER_GENERATION": 2000,
-"BASE_DIR" : "$HOME/results/minigo/final/",
+"BASE_DIR" : "/research/results/minigo/final/",
 "HOLDOUT_PCT": 0,
 "NUM_MAIN_ITERATIONS": 10000,
 "BOARD_SIZE": 9,

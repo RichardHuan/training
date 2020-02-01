@@ -1,17 +1,16 @@
-SSY
-# on host
+# INSTALL 
+## on host
 docker upll nvidia/cuda:9.0-cudnn7-runtime-ubuntu16.04
-sudo nvidia-docker run -i -t  --ipc=host  --entrypoint "bash"   -v /root/ssy/training/reinforcement/:/research/reinforcement  --name ssyREF   nvidia/cuda:9.0-cudnn7-runtime-ubuntu16.04
+sudo nvidia-docker run -i -t  --ipc=host  --entrypoint "bash"   -v /root/ssy/training/reinforcement:/research/reinforcement  --name ssyREF   nvidia/cuda:9.0-cudnn7-runtime-ubuntu16.04
 
-# in docker
+## in docker
 export http_proxy=http://172.17.0.1:3128
 export https_proxy=https://172.17.0.1:3128
 apt-get update 
-source research/reinforcement/tensorflow/env.sh
-apt-get install -y python-setuptools
+source /research/reinforcement/tensorflow/env.sh
+apt-get install -y python-setuptools vim
 apt-get install -y python-pip python3-pip virtualenv htop
-pip3 install virtualenv
-pip3 install virtualenvwrapper
+pip3 install virtualenv  virtualenvwrapper
 
 pip3 install --upgrade pip
 pip3 install --upgrade setuptools
@@ -20,6 +19,18 @@ pip3 install -r /research/reinforcement/tensorflow/minigo/requirements.txt
 pip3 install --upgrade numpy scipy sklearn tf-nightly-gpu
 pip3 install "tensorflow-gpu==1.8"
 
+
+# START
+## on host
+sudo nvidia-docker start ssyREF
+nvidia-docker exec -it ssyREF /bin/bash
+
+## on docker
+cd /research/reinforcement/tensorflow/
+source env.sh
+
+## real test
+run_and_time.sh 1
 
 # 1. Problem 
 This task benchmarks on policy reinforcement learning for the 9x9 version of the boardgame go. The model plays games against itself and uses these games to improve play.
