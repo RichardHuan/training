@@ -32,7 +32,6 @@ import tensorflow as tf
 #from tensorflow.python.lib.io import file_io
 
 from tensorflow.examples.tutorials.mnist import input_data
-
 FLAGS = None
 
 
@@ -57,7 +56,7 @@ def train():
   # We can't initialize these variables to 0 - the network will get stuck.
   def weight_variable(shape):
     """Create a weight variable with appropriate initialization."""
-    initial = tf.random.truncated_normal(shape, stddev=0.1)
+    initial = tf.truncated_normal(shape, stddev=0.1)
     return tf.Variable(initial)
 
   def bias_variable(shape):
@@ -105,7 +104,8 @@ def train():
   with tf.name_scope('dropout'):
     keep_prob = tf.placeholder(tf.float32)
     tf.summary.scalar('dropout_keep_probability', keep_prob)
-    dropped = tf.nn.dropout(hidden1, rate=(1 - keep_prob))
+    #dropped = tf.nn.dropout(hidden1, rate=(1 - keep_prob))
+    dropped = tf.nn.dropout(hidden1, keep_prob=keep_prob)
 
   # Do not apply softmax activation yet, see below.
   y = nn_layer(dropped, 500, 10, 'layer2', act=tf.identity)
