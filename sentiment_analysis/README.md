@@ -1,3 +1,13 @@
+# SSY
+## download docker
+docker pull sidgoyal78/paddle:benchmark12042018
+
+## start docker
+cd paddle/
+
+## download data inside docker
+
+
 # 1. Problem 
 Sentiment Analysis is a binary classification task. It predicts positive or negative sentiment using raw user text. The IMDB dataset is used for this benchmark.
 # 2. Directions
