@@ -32,6 +32,8 @@ import tensorflow as tf
 #from tensorflow.python.lib.io import file_io
 
 from tensorflow.examples.tutorials.mnist import input_data
+
+from pgrad import *
 FLAGS = None
 
 
@@ -93,7 +95,8 @@ def train():
         biases = bias_variable([output_dim])
         variable_summaries(biases)
       with tf.name_scope('Wx_plus_b'):
-        preactivate = tf.matmul(input_tensor, weights) + biases
+        preactivate1 = tf.matmul(id_bf16cut(input_tensor), weights) + biases
+        preactivate=id_bf16cut(preactivate1)
         tf.summary.histogram('pre_activations', preactivate)
       activations = act(preactivate, name='activation')
       tf.summary.histogram('activations', activations)
