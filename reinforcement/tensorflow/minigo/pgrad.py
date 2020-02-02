@@ -3,10 +3,10 @@ from tensorflow.python.framework import ops
 import numpy as np
 #from bf import *
 
-def bf16cut_tf(xmlp):
-  return xmlp
+#def bf16cut_tf(xmlp):
+#  return xmlp
 
-def bf16cut_tf_(xmlp):
+def bf16cut_tf(xmlp):
   print("xmlp bf16cut_tf "+str(xmlp))
   ssign=tf.sign(xmlp)
   aabs=tf.abs(xmlp)
@@ -24,10 +24,10 @@ def bf16cut_tf_(xmlp):
   print("res1 shape bf16cut_tf "+str(res1.shape))
   return res1
 
-def bf16cut_np(xmlp):
-  return xmlp
+#def bf16cut_np(xmlp):
+#  return xmlp
 
-def bf16cut_np_(xmlp):
+def bf16cut_np(xmlp):
   print("xmlp bf16cut_np "+str(xmlp))
   ssign=np.sign(xmlp)
   aabs=np.abs(xmlp)
