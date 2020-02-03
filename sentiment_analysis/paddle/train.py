@@ -214,7 +214,7 @@ if __name__ == '__main__':
              save_dirname="understand_sentiment_conv.inference.model")
     else:
         main(word_dict,
-             use_method=stacked_lstm_net,
+             net_method=stacked_lstm_net,
              use_cuda=True,
              seed=args.seed,
              quality=args.target_quality,
