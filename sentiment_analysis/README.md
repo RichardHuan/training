@@ -3,10 +3,29 @@
 docker pull sidgoyal78/paddle:benchmark12042018
 
 ## start docker
+nvidia-docker run -it -v `pwd`:/paddle --name ssySENT sidgoyal78/paddle:benchmark12042018 /bin/bash
+sudo nvidia-docker start ssySENT
+nvidia-docker exec -it ssySENT /bin/bash
 cd paddle/
 
-## download data inside docker
+source env.sh
+apt update
+apt install -y vim python3 python3-pip
+pip3 install --upgrade pip
+pip3 install requests
 
+## download data inside docker
+source download_dataset.sh
+source verify_dataset.sh
+
+# update to cuda 9.0 and cudnn 7 from nvidia web site
+
+# update paddle gpu
+pip2 install paddlepaddle-gpu==0.14.0
+
+## run 
+cd paddle/
+CUDA_VISIBLE_DEVICES=3 ./run_and_time.sh 1
 
 # 1. Problem 
 Sentiment Analysis is a binary classification task. It predicts positive or negative sentiment using raw user text. The IMDB dataset is used for this benchmark.
@@ -54,6 +73,8 @@ To run the docker container, use:
 ```
 nvidia-docker run -it -v `pwd`:/paddle sidgoyal78/paddle:benchmark12042018 /bin/bash
 cd paddle/
+
+
 ```
 
 ### Steps to download and verify data

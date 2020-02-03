@@ -30,7 +30,7 @@ cd /research/reinforcement/tensorflow/
 source env.sh
 
 ## real test
-run_and_time.sh 1
+CUDA_VISIBLE_DEVICES=1 run_and_time.sh 1
 
 # 1. Problem 
 This task benchmarks on policy reinforcement learning for the 9x9 version of the boardgame go. The model plays games against itself and uses these games to improve play.

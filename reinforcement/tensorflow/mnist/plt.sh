@@ -13,4 +13,4 @@ grep "^Accuracy" l12_bf9_v100| awk '{print substr($4,1,length($4)-1) " "  $5}' >
 grep "^Accuracy" l13_bf8_v100| awk '{print substr($4,1,length($4)-1) " "  $5}' > a13_bf8_v100
 grep "^Accuracy" l14_bf7_v100| awk '{print substr($4,1,length($4)-1) " "  $5}' > a14_bf7_v100
 
-gnuplot -p -e 'set xlabel "Epoch";set ylabel "Accuracy";set key right bottom;plot "a1_fp32_v100" u 1:2 w linesp, "a5_bf16_v100" u 1:2 w linesp, "a10_bf11_v100" u 1:2 w linesp title "3 bits mantissa","a12_bf9_v100" u 1:2 w linesp title "1 bit mantissa","a13_bf8_v100" u 1:2 w linesp title "1 bit leading 1 and no mantissa"'
+gnuplot -p -e 'set xlabel "Epoch";set ylabel "Accuracy";set key right bottom;set yrange [0.7:1] ; plot "a1_fp32_v100" u 1:2 w linesp, "a5_bf16_v100" u 1:2 w linesp, "a10_bf11_v100" u 1:2 w linesp title "3 bits mantissa","a12_bf9_v100" u 1:2 w linesp title "1 bit mantissa","a13_bf8_v100" u 1:2 w linesp title "1 bit leading 1 and no mantissa"'

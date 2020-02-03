@@ -1,0 +1,17 @@
+STARTING TIMING RUN AT 2020-02-03 01:46:54 AM
+Running sentiment benchmark with seed 1
+Traceback (most recent call last):
+  File "train.py", line 214, in <module>
+    save_dirname="understand_sentiment_conv.inference.model")
+  File "train.py", line 188, in main
+    save_dirname=save_dirname)
+  File "train.py", line 173, in train
+    train_loop(fluid.default_main_program())
+  File "train.py", line 137, in train_loop
+    exe.run(fluid.default_startup_program())
+  File "/usr/local/lib/python2.7/dist-packages/paddle/fluid/executor.py", line 336, in run
+    self.executor.run(program.desc, scope, 0, True, True)
+RuntimeError: function_attributes(): after cudaFuncGetAttributes: invalid device function
+ENDING TIMING RUN AT 2020-02-03 01:51:49 AM
+RESULT,sentiment,1,295,,2020-02-03 01:46:54 AM
+

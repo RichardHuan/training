@@ -1,19 +1,19 @@
 # SSY 
 
-### Steps to download and verify data
-
+## download data
 You can download and verify the dataset by running the `download_dataset.sh` and `verify_dataset.sh` scripts in the parent directory:
 
-3. Get the docker image for the recommendation task
-
-```bash
-# Pull from Docker Hub
+## pull docker direct use
 docker pull mlperf/recommendation:v0.5
-# but this image need to be modified to use bf16
-# refer to start.sh to how to create a new container ssyNCF 
+
+## start docker
+sudo nvidia-docker run -i -t  --ipc=host  --entrypoint "bash"   --mount "type=bind,source=$(pwd),destination=/mlperf/experiment"  --name ssyNCF   mlperf/recommendation:v0.5 
+sudo nvidia-docker start ssyNCF
+nvidia-docker exec -it ssyNCF /bin/bash
+
 
 # this is the real running script
-run_and_time.sh 3|tee lxx
+CUDA_VISIBLE_DEVICES=0 run_and_time.sh 3|tee lxx
 
 # to insert my bf16
 # and then try run this
