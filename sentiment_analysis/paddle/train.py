@@ -197,7 +197,8 @@ if __name__ == '__main__':
                         choices=['conv', 'lstm'], default='conv',
                         help="Model type for sentiment analysis")
     parser.add_argument('-q', '--target_quality', type=float, required=False,
-                        default=90.6,
+                        #default=90.6,
+                        default=91.0,
                         help="Target validation quality to stop training")
     parser.add_argument('-s', '--seed', type=int, required=False, default=1,
                         help="Seed for random number generator")

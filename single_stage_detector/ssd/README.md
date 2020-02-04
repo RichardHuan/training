@@ -6,18 +6,14 @@ cd reference/single_stage_detector/
 source download_dataset.sh
 
 ## building docker
+docker build . -t mlperf-nvidia:single_stage_detector
 
-docker build -t mlperf/single_stage_detector .
-nvidia-docker run -it -v /coco:/coco -v /root/ssy/training/single_stage_detector/ssd:/mlperf/ssd --name ssySSD mlperf/single_stage_detector
-
-nvidia-docker start ssySSD
-nvidia-docker exec -it ssySSD /bin/bash
-#install python3-tk
-apt install python3-tk --fix-missing
-
+#nvidia-docker run -it -v /coco:/coco -v /root/ssy/training/single_stage_detector/ssd:/mlperf/ssd --name ssySSD mlperf/single_stage_detector
+#nvidia-docker start ssySSD
+#nvidia-docker exec -it ssySSD /bin/bash
 
 ## RUN
-CUDA_VISIBLE_DEVICES=4 source run_and_time.sh 1 0.212 
+CUDA_VISIBLE_DEVICES=4 DATADIR="/coco" LOGDIR="./log1" DGXSYSTEM=DGX1_32 ./run.sub
 
 # 1. Problem
 Object detection.

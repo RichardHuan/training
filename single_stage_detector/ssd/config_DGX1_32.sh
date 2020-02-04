@@ -12,7 +12,9 @@ WALLTIME=24:00:00
 
 ## System config params
 DGXNGPU=1
-DGXSOCKETCORES=4
-DGXNSOCKET=1
-DGXHT=1 	# HT is on is 2, HT off is 1
+# SSY my g5500 have 14 cores
+DGXSOCKETCORES=14
+DGXNSOCKET=2
+# SSY HT is on in my g5500
+DGXHT=2 	# HT is on is 2, HT off is 1
 DGXIBDEVICES=''
