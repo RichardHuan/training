@@ -17,7 +17,7 @@ and its data dir is all related scripts to be downloaded to my local data dir
 
 in docker
 source download_and_preprocess_imagenet /imn
-
+CUDA_VISIBLE_DEVICES=7 ./run_and_time.sh 1 |tee l1
 
 
     cd ~/reference/image_classification/tensorflow/

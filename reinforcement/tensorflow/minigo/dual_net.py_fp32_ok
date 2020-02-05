@@ -35,8 +35,6 @@ import preprocessing
 import symmetries
 import go
 
-from pgrad import *
-
 # How many positions to look at per generation.
 # Per AGZ, 2048 minibatch * 1k = 2M positions/generation
 #EXAMPLES_PER_GENERATION = 2000000
@@ -173,13 +171,13 @@ def model_fn(features, labels, mode, params, config=None):
         filters=params['k'], kernel_size=[3, 3], padding="same")
 
     def my_res_layer(inputs):
-        int_layer1 = my_batchn(my_conv2d(tf.reshape(id_bf16cut(inputs),tf.shape(inputs))))
+        int_layer1 = my_batchn(my_conv2d(inputs))
         initial_output = tf.nn.relu(int_layer1)
-        int_layer2 = my_batchn(my_conv2d(tf.reshape(id_bf16cut(initial_output),tf.shape(initial_output))))
+        int_layer2 = my_batchn(my_conv2d(initial_output))
         output = tf.nn.relu(inputs + int_layer2)
         return output
 
-    initial_output = tf.nn.relu(my_batchn(my_conv2d(tf.reshape(id_bf16cut(features),tf.shape(features)))))
+    initial_output = tf.nn.relu(my_batchn(my_conv2d(features)))
 
     # the shared stack
     shared_output = initial_output
@@ -188,23 +186,23 @@ def model_fn(features, labels, mode, params, config=None):
 
     # policy head
     policy_conv = tf.nn.relu(my_batchn(
-        my_conv2d(tf.reshape(id_bf16cut(shared_output),tf.shape(shared_output)), filters=2, kernel_size=[1, 1]),
+        my_conv2d(shared_output, filters=2, kernel_size=[1, 1]),
         center=False, scale=False))
-    logits = tf.layers.dense(tf.reshape(id_bf16cut(
-        tf.reshape(policy_conv, [-1, go.N * go.N * 2])),[-1, go.N * go.N * 2]),
+    logits = tf.layers.dense(
+        tf.reshape(policy_conv, [-1, go.N * go.N * 2]),
         go.N * go.N + 1)
 
     policy_output = tf.nn.softmax(logits, name='policy_output')
 
     # value head
     value_conv = tf.nn.relu(my_batchn(
-        my_conv2d(tf.reshape(id_bf16cut(shared_output),tf.shape(shared_output)), filters=1, kernel_size=[1, 1]),
+        my_conv2d(shared_output, filters=1, kernel_size=[1, 1]),
         center=False, scale=False))
     value_fc_hidden = tf.nn.relu(tf.layers.dense(
-        tf.reshape(id_bf16cut(tf.reshape(value_conv, [-1, go.N * go.N])),[-1, go.N * go.N]),
+        tf.reshape(value_conv, [-1, go.N * go.N]),
         params['fc_width']))
     value_output = tf.nn.tanh(
-        tf.reshape(tf.layers.dense(tf.reshape(id_bf16cut(value_fc_hidden),tf.shape(value_fc_hidden)), 1), [-1]),
+        tf.reshape(tf.layers.dense(value_fc_hidden, 1), [-1]),
         name='value_output')
 
     # train ops

@@ -1,3 +1,20 @@
+# SSY
+
+## downlaod data
+source download_dataset.sh
+source verify_dataset.sh
+
+
+## build docker
+docker build .  -t gnmt:latest
+
+nvidia-docker run -it  --ipc=host -v /root/ssy/training/rnn_translator/pytorch:/workspace/pytorch --name ssyRNN gnmt:latest
+nvidia-docker start ssyRNN
+nvidia-docker exec -it ssyRNN /bin/bash
+
+
+# 
+
 # 1. Problem
 
 This problem uses recurrent neural network to do language translation.

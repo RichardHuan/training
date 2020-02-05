@@ -1,0 +1,7 @@
+0	NCF	recommendation/
+1	MINIGO	reinforcement/tensorflow/minigo/
+2	MNIST	reinforcement/tensorflow/mnist/
+3	SENTA	sentiment_analysis/
+4	SSD	single_stage_detector_old2/
+5	SSDBF16	single_stage_detector_old2_bf16/
+6,7	IMNET	image_classification/

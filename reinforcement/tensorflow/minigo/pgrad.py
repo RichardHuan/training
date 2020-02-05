@@ -7,44 +7,45 @@ import numpy as np
 #  return xmlp
 
 def bf16cut_tf(xmlp):
-  print("xmlp bf16cut_tf "+str(xmlp))
+  #print("xmlp bf16cut_tf "+str(xmlp))
   ssign=tf.sign(xmlp)
   aabs=tf.abs(xmlp)
-  a=tf.where(tf.equal(aabs,0.0),aabs,tf.divide(tf.log(aabs),tf.log(2.0)))
+  a=tf.where(tf.equal(aabs,0.0),aabs,
+     tf.divide(tf.log(aabs),tf.log(2.0)))
   b_exp=tf.floor(a) # exp value
   rnd2exp=tf.pow(2.0,b_exp) # get back the old value rounded to 2 exp
   mantis=tf.divide(aabs,rnd2exp) # mantis
-  print("mantis "+str(mantis))
+  #print("mantis "+str(mantis))
   m256=tf.multiply(mantis,256.0)
   f256=tf.floor(m256)
   d256=tf.divide(f256,256.0)
   res=tf.multiply(d256,rnd2exp)
   res1= tf.multiply(res,ssign)
-  print("res1 bf16cut_tf "+str(res1))
-  print("res1 shape bf16cut_tf "+str(res1.shape))
+  #print("res1 bf16cut_tf "+str(res1))
+  #print("res1 shape bf16cut_tf "+str(res1.shape))
   return res1
 
 #def bf16cut_np(xmlp):
 #  return xmlp
 
 def bf16cut_np(xmlp):
-  print("xmlp bf16cut_np "+str(xmlp))
+  #print("xmlp bf16cut_np "+str(xmlp))
   ssign=np.sign(xmlp)
   aabs=np.abs(xmlp)
   #a=np.divide(np.log(aabs),np.log(2.0))
   a=np.where(aabs==0.0,0.0,np.log2(aabs))
-  print("a bf16cut_np "+str(a))
+  #print("a bf16cut_np "+str(a))
   b_exp=np.floor(a) # exp value
   rnd2exp=np.power(2.0,b_exp) # get back the old value rounded to 2 exp
   mantis=np.divide(aabs,rnd2exp) # mantis
-  print("mantis "+str(mantis))
+  #print("mantis "+str(mantis))
   m256=np.multiply(mantis,256.0)
   f256=np.floor(m256)
   d256=np.divide(f256,256.0)
   res=np.multiply(d256,rnd2exp)
   res1= np.multiply(res,ssign)
-  print("res1 bf16cut_np "+str(res1))
-  print("res1 shape bf16cut_np "+str(res1.shape))
+  #print("res1 bf16cut_np "+str(res1))
+  #print("res1 shape bf16cut_np "+str(res1.shape))
   return res1
 
 # Define custom py_func which takes also a grad op as argument:

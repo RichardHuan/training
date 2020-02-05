@@ -11,15 +11,19 @@ from mlperf_compliance import mlperf_log
 def float2bf16(xmlp):
         ssign=torch.sign(xmlp)
         aabs=torch.abs(xmlp)
-        a=torch.log2(aabs)
+        a=torch.where(aabs==0.0,aabs,torch.log2(aabs))
         b_exp=torch.floor(a) # exp value
         rnd2exp=torch.pow(2,b_exp) # get back the old value rounded to 2 exp
         mantis=torch.div(aabs,rnd2exp) # mantis
-        m256=torch.mul(mantis,256)
+        m256=torch.mul(mantis,2)
         f256=torch.floor(m256)
-        d256=torch.div(f256,256)
+        d256=torch.div(f256,2)
         res=torch.mul(d256,rnd2exp)
-        return torch.mul(res,ssign)
+        res1= torch.mul(res,ssign)
+        # already debug to remove nan from log(0)
+        #print("xmlp "+str(xmlp))
+        #print("res1 "+str(res1))
+        return res1
 
 class bf16cut(Function):
     @staticmethod
