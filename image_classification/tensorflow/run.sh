@@ -9,7 +9,7 @@ export PYTHONPATH="$(pwd):${PYTHONPATH}"
 
 MODEL_DIR="/tmp/resnet_imagenet_${RANDOM_SEED}"
 
-python3 official/resnet/imagenet_main.py $RANDOM_SEED --data_dir /imn/imagenet/combined/  \
+python3 official/resnet/imagenet_main.py $RANDOM_SEED --data_dir /imn/  \
   --model_dir $MODEL_DIR --train_epochs 10000 --stop_threshold $QUALITY --batch_size 64 \
   --version 1 --resnet_size 50 --epochs_between_evals 4
 

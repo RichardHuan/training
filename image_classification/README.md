@@ -1,4 +1,25 @@
 # SSY
+
+## docker building
+docker build . -t mlperf-nvidia:image_classification
+
+nvidia-docker run -it -v /home/nfs/dataset:/imn -v /root/ssy/training/image_classification/tensorflow:/research/tensorflow --name ssyIMN mlperf-nvidia:image_classification
+nvidia-docker start ssyIMN
+nvidia-docker exec -it ssyIMN /bin/bash
+
+## download and process data
+
+https://github.com/mlperf/training/issues/122
+https://github.com/tensorflow/models/tree/master/research/inception#getting-started
+https://github.com/tensorflow/models/blob/master/research/inception/inception/data/download_and_preprocess_imagenet.sh
+the last is the script to convert imagenet
+and its data dir is all related scripts to be downloaded to my local data dir 
+
+in docker
+source download_and_preprocess_imagenet /imn
+
+
+
     cd ~/reference/image_classification/tensorflow/
     IMAGE=`sudo docker build . | tail -n 1 | awk '{print $3}'`
     SEED=2
