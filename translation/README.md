@@ -1,3 +1,17 @@
+# SSY
+
+## download data
+the old link is invalid, I need to modify it and the verify script can not be used anymore
+
+## docker
+
+docker build . -t mlperf-nvidia:single_stage_detector
+
+nvidia-docker run -it -v /coco:/coco --ipc=host -v /root/ssy/training/single_stage_detector_old2/ssd:/mlperf/ssd --name ssySSD mlperf-nvidia:single_stage_detector
+nvidia-docker start ssySSD
+nvidia-docker exec -it ssySSD /bin/bash
+
+
 
 # 1. Problem 
 

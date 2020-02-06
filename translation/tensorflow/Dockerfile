@@ -1,7 +1,9 @@
 FROM nvidia/cuda:9.0-cudnn7-runtime-ubuntu16.04
 WORKDIR /research
-RUN apt-get update
-RUN apt-get update && apt-get install -y --no-install-recommends \
+ENV http_proxy=http://172.17.0.1:3128
+ENV https_proxy=https://172.17.0.1:3128
+RUN apt-get update -o Acquire::https::developer.download.nvidia.com::Verify-Peer=false
+RUN apt-get install -y --no-install-recommends \
     ca-certificates \
     build-essential \
     git \
@@ -18,7 +20,7 @@ ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 
 # Mount data into the docker
-ADD . /research/transformer
+#ADD . /research/transformer
 WORKDIR /research/transformer
 RUN pip3 install -r requirements.txt
 ENTRYPOINT ["/bin/bash"]

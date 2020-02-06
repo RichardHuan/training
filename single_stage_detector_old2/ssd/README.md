@@ -8,16 +8,16 @@ source download_dataset.sh
 ## building docker
 docker build . -t mlperf-nvidia:single_stage_detector
 
-nvidia-docker run -it -v /coco:/coco --ipc=host -v /root/ssy/training/single_stage_detector_old2_bf12/ssd:/mlperf/ssd --name ssySSD_BF12 mlperf-nvidia:single_stage_detector
-nvidia-docker start ssySSD_BF12
-nvidia-docker exec -it ssySSD_BF12 /bin/bash
+nvidia-docker run -it -v /coco:/coco --ipc=host -v /root/ssy/training/single_stage_detector_old2/ssd:/mlperf/ssd --name ssySSD mlperf-nvidia:single_stage_detector
+nvidia-docker start ssySSD
+nvidia-docker exec -it ssySSD /bin/bash
 
 # modify torchvision resnet https to http
 
 ## RUN
 cp model_zoo.py "/opt/conda/lib/python3.6/site-packages/torch/utils/model_zoo.py"
 source env.sh
-CUDA_VISIBLE_DEVICES=3  ./run_and_time.sh 1 |tee l3
+CUDA_VISIBLE_DEVICES=4  ./run_and_time.sh 1 |tee l1
 # 1. Problem
 Object detection.
 

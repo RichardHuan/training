@@ -8,11 +8,11 @@ source verify_dataset.sh
 ## build docker
 docker build .  -t gnmt:latest
 
-nvidia-docker run -it  --ipc=host -v /root/ssy/training/rnn_translator/pytorch:/workspace/pytorch --name ssyRNN gnmt:latest
+nvidia-docker run -it  --ipc=host -v /root/ssy/dataset/rnn_translator/data:/data -v /root/ssy/training/rnn_translator/pytorch:/workspace/pytorch --name ssyRNN gnmt:latest
 nvidia-docker start ssyRNN
 nvidia-docker exec -it ssyRNN /bin/bash
 
-
+CUDA_VISIBLE_DEVICES=2 ./run_and_time.sh 1 |tee l1_fp32_v100
 # 
 
 # 1. Problem
