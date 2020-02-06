@@ -5,11 +5,11 @@ the old link is invalid, I need to modify it and the verify script can not be us
 
 ## docker
 
-docker build . -t mlperf-nvidia:single_stage_detector
+docker build . -t mlperf-nvidia:bert
 
-nvidia-docker run -it -v /coco:/coco --ipc=host -v /root/ssy/training/single_stage_detector_old2/ssd:/mlperf/ssd --name ssySSD mlperf-nvidia:single_stage_detector
-nvidia-docker start ssySSD
-nvidia-docker exec -it ssySSD /bin/bash
+nvidia-docker run -it --ipc=host -v /root/ssy/training/translation/tensorflow/transformer:/research/transformer -v /root/ssy/dataset/bert/raw_data:/raw_data --name ssyBERT mlperf-nvidia:bert
+nvidia-docker start ssyBERT
+nvidia-docker exec -it ssyBERT /bin/bash
 
 
 
