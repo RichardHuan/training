@@ -13,6 +13,12 @@ nvidia-docker start ssyRNN
 nvidia-docker exec -it ssyRNN /bin/bash
 
 CUDA_VISIBLE_DEVICES=2 ./run_and_time.sh 1 |tee l1_fp32_v100
+
+
+## VERY IMPORTANT
+GNMT use LSTM from pytorch's install, I need to save /opt/conda/lib/python3.6/site-packages/torch/nn/modules/rnn.py
+q
+
 # 
 
 # 1. Problem

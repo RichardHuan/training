@@ -257,6 +257,8 @@ def main():
     # build GNMT model
     model_config = dict(vocab_size=vocab_size, math=args.math,
                         **literal_eval(args.model_config))
+    # SSY the real model
+    # seq2seq/models/gnmt.py
     model = models.GNMT(**model_config)
     logging.info(model)
 
@@ -283,6 +285,8 @@ def main():
         distributed=distributed)
 
     trainer_options['model'] = model
+    # SSY only the trainer seq2seq/train/trainer.py
+    # not the models
     trainer = trainers.Seq2SeqTrainer(**trainer_options)
 
     translator = Translator(model,

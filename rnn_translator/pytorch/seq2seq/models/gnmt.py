@@ -38,8 +38,10 @@ class GNMT(Seq2Seq):
 
 
     def forward(self, input_encoder, input_enc_len, input_decoder):
+        #SSY seq2seq/models/encoder.py
         context = self.encode(input_encoder, input_enc_len)
         context = (context, input_enc_len, None)
+        # SSY seq2seq/models/decoder.py
         output, _, _ = self.decode(input_decoder, context)
 
         return output
