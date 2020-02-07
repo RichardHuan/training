@@ -17,7 +17,7 @@ nvidia-docker exec -it ssySSD_BF16 /bin/bash
 ## RUN
 cp model_zoo.py "/opt/conda/lib/python3.6/site-packages/torch/utils/model_zoo.py"
 source env.sh
-CUDA_VISIBLE_DEVICES=6  ./run_and_time.sh 1 |tee l1
+CUDA_VISIBLE_DEVICES=5  ./run_and_time.sh 1 |tee l1
 # 1. Problem
 Object detection.
 

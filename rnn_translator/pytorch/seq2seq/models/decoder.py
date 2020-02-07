@@ -31,7 +31,13 @@ class RecurrentAttention(nn.Module):
         # softmax
         self.attn.set_mask(context_len, context)
 
-        rnn_outputs, hidden = self.rnn(bf16cut.apply(inputs), bf16cut.apply(hidden))
+        rnn_outputs, hidden = self.rnn(bf16cutfp.apply(inputs), 
+                          hidden)
+                          # SSY it seems to be None 
+                          #bf16cutfp.apply(hidden))
+        rnn_outputs=bf16cutbp.apply(rnn_outputs)
+        hidden=bf16cutbp.apply(hidden)
+
         attn_outputs, scores = self.attn(rnn_outputs, context)
         rnn_outputs = self.dropout(rnn_outputs)
 
@@ -52,7 +58,8 @@ class Classifier(nn.Module):
         self.classifier = nn.Linear(in_features, out_features)
 
     def forward(self, x):
-        out = self.classifier(bf16cut.apply(x))
+        out = self.classifier(bf16cutfp.apply(x))
+        out=bf16cutbp.apply(out)
         out = out[..., :self.out_features]
         return out
 
@@ -121,14 +128,18 @@ class ResidualRecurrentDecoder(nn.Module):
 
         x = self.dropout(x)
         x = torch.cat((x, attn), dim=2)
-        x, h = self.rnn_layers[0](bf16cut.apply(x), bf16cut.apply(hidden[1]))
+        x, h = self.rnn_layers[0](bf16cutfp.apply(x), hidden[1])
+        x=bf16cutbp.apply(x)
+        h=bf16cutbp.apply(h)
         self.append_hidden(h)
 
         for i in range(1, len(self.rnn_layers)):
             residual = x
             x = self.dropout(x)
             x = torch.cat((x, attn), dim=2)
-            x, h = self.rnn_layers[i](bf16cut.apply(x), bf16cut.apply(hidden[i + 1]))
+            x, h = self.rnn_layers[i](bf16cutfp.apply(x), hidden[i + 1])
+            x=bf16cutbp.apply(x)
+            h=bf16cutbp.apply(h)
             self.append_hidden(h)
             x = x + residual
 

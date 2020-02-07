@@ -39,23 +39,28 @@ class ResidualRecurrentEncoder(nn.Module):
     def forward(self, inputs, lengths):
         x = self.embedder(inputs)
         # SSY apply bf16cut before packing 
-        x=bf16cut.apply(x)
+        x=bf16cutfp.apply(x)
         # bidirectional layer
         x = pack_padded_sequence(x, lengths.cpu().numpy(),
                                  batch_first=self.batch_first)
         x, _ = self.rnn_layers[0](x)
         x, _ = pad_packed_sequence(x, batch_first=self.batch_first)
 
+        # SSY apply bp
+        x=bf16cutbp.apply(x)
+
         # 1st unidirectional layer
-        x = self.dropout(id_bfx)
-        x, _ = self.rnn_layers[1](bf16cut.apply(x))
+        x = self.dropout(x)
+        x, _ = self.rnn_layers[1](bf16cutfp.apply(x))
+        x=bf16cutbp.apply(x)
 
         # the rest of unidirectional layers,
         # with residual connections starting from 3rd layer
         for i in range(2, len(self.rnn_layers)):
             residual = x
             x = self.dropout(x)
-            x, _ = self.rnn_layers[i](bf16cut.apply(x))
+            x, _ = self.rnn_layers[i](bf16cutfp.apply(x))
+            x=bf16cutbp.apply(x)
             x = x + residual
 
         return x
