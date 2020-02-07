@@ -1,4 +1,4 @@
-0	NCF	recommendation/
+0	NCF, bert	recommendation/
 1	MINIGO	reinforcement/tensorflow/minigo/
 2	MNIST,RNN	reinforcement/tensorflow/mnist/
 3	SENTA,SSDBF12	sentiment_analysis/

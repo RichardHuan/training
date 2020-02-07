@@ -1,7 +1,9 @@
 # SSY
 
 ## download data
-the old link is invalid, I need to modify it and the verify script can not be used anymore
+# the old link is invalid, I need to modify it and the verify script can not be used anymore
+source download_data.sh
+# and then move them to ~/ssy/dataset/bert
 
 ## docker
 
@@ -11,6 +13,12 @@ nvidia-docker run -it --ipc=host -v /root/ssy/training/translation/tensorflow/tr
 nvidia-docker start ssyBERT
 nvidia-docker exec -it ssyBERT /bin/bash
 
+## preprocess data
+# source run_preprocessing.sh
+# this will be run by following real run
+
+## real run
+CUDA_VISIBLE_DEVICES=0 source ./run_and_time.sh  1|tee l1_fp32_v100
 
 
 # 1. Problem 
