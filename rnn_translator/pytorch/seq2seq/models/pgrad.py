@@ -19,6 +19,7 @@ def float2bf16_(xmlp):
         #print("res1 "+str(res1))
         return res1
 
+# SSY avoid lots of intermedia result space
 def float2bf16(xmlp):
         aabs=torch.abs(xmlp)
         rnd2exp=torch.pow(2,torch.floor(torch.where(aabs==0.0,aabs,torch.log2(aabs)))) # get back the old value rounded to 2 exp
