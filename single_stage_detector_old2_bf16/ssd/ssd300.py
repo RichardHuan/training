@@ -66,35 +66,51 @@ class SSD300(nn.Module):
 
         if input_size == 38:
             self.additional_blocks.append(nn.Sequential(
+                bf16cutfp_mod(),
                 nn.Conv2d(input_channels[idx], 256, kernel_size=1),
+                bf16cutbp_mod(),
                 nn.ReLU(inplace=True),
+                bf16cutfp_mod(),
                 nn.Conv2d(256, input_channels[idx+1], kernel_size=3, padding=1, stride=2),
+                bf16cutbp_mod(),
                 nn.ReLU(inplace=True),
             ))
             idx += 1
 
         self.additional_blocks.append(nn.Sequential(
+            bf16cutfp_mod(),
             nn.Conv2d(input_channels[idx], 256, kernel_size=1),
+            bf16cutbp_mod(),
             nn.ReLU(inplace=True),
+            bf16cutfp_mod(),
             nn.Conv2d(256, input_channels[idx+1], kernel_size=3, padding=1, stride=2),
+            bf16cutbp_mod(),
             nn.ReLU(inplace=True),
         ))
         idx += 1
 
         # conv9_1, conv9_2
         self.additional_blocks.append(nn.Sequential(
+            bf16cutfp_mod(),
             nn.Conv2d(input_channels[idx], 128, kernel_size=1),
+            bf16cutbp_mod(),
             nn.ReLU(inplace=True),
+            bf16cutfp_mod(),
             nn.Conv2d(128, input_channels[idx+1], kernel_size=3, padding=1, stride=2),
+            bf16cutbp_mod(),
             nn.ReLU(inplace=True),
         ))
         idx += 1
 
         # conv10_1, conv10_2
         self.additional_blocks.append(nn.Sequential(
+            bf16cutfp_mod(),
             nn.Conv2d(input_channels[idx], 128, kernel_size=1),
+            bf16cutbp_mod(),
             nn.ReLU(inplace=True),
+            bf16cutfp_mod(),
             nn.Conv2d(128, input_channels[idx+1], kernel_size=3),
+            bf16cutbp_mod(),
             nn.ReLU(inplace=True),
         ))
         idx += 1
@@ -103,9 +119,13 @@ class SSD300(nn.Module):
         if input_size >= 19:
             # conv11_1, conv11_2
             self.additional_blocks.append(nn.Sequential(
+                bf16cutfp_mod(),
                 nn.Conv2d(input_channels[idx], 128, kernel_size=1),
+                bf16cutbp_mod(),
                 nn.ReLU(inplace=True),
+                bf16cutfp_mod(),
                 nn.Conv2d(128, input_channels[idx+1], kernel_size=3),
+                bf16cutbp_mod(),
                 nn.ReLU(inplace=True),
             ))
 
