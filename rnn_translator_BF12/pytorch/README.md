@@ -8,11 +8,11 @@ source verify_dataset.sh
 ## build docker
 docker build .  -t gnmt:latest
 
-nvidia-docker run -it  --ipc=host -v /root/ssy/dataset/rnn_translator/data:/data -v /root/ssy/training/rnn_translator_BF16/pytorch:/workspace/pytorch --name ssyRNN_BF16 gnmt:latest
-nvidia-docker start ssyRNN_BF16
-nvidia-docker exec -it ssyRNN_BF16 /bin/bash
+nvidia-docker run -it  --ipc=host -v /root/ssy/dataset/rnn_translator/data:/data -v /root/ssy/training/rnn_translator_BF12/pytorch:/workspace/pytorch --name ssyRNN_BF12 gnmt:latest
+nvidia-docker start ssyRNN_BF12
+nvidia-docker exec -it ssyRNN_BF12 /bin/bash
 
-CUDA_VISIBLE_DEVICES=3 ./run_and_time.sh 1 |tee l1_fp32_v100
+CUDA_VISIBLE_DEVICES=5 ./run_and_time.sh 1 |tee l1_fp32_v100
 
 
 ## VERY IMPORTANT

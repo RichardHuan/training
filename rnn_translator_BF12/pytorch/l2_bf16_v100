@@ -1,0 +1,69 @@
+STARTING TIMING RUN AT 2020-02-07 02:20:59 PM
+running benchmark
+:::MLPv0.5.0 gnmt 1581085265.400937796 (train.py:180) run_start
+Namespace(batch_size=128, beam_size=5, bucketing=True, cov_penalty_factor=0.1, cuda=True, cudnn=True, dataset_dir='/data', disable_eval=False, dist_url='tcp://localhost:23456', epochs=8, eval_batch_size=32, grad_clip=5.0, keep_checkpoints=0, len_norm_const=5.0, len_norm_factor=0.6, math='fp32', max_length_train=50, max_length_val=150, max_size=None, min_length_train=0, min_length_val=0, model_config="{'hidden_size': 1024,'num_layers': 4,                         'dropout': 0.2, 'share_embedding': True}", optimization_config="{'optimizer': 'Adam', 'lr': 5e-4}", print_freq=10, rank=0, results_dir='../results', resume=None, save='gnmt_wmt16', save_all=False, save_freq=5000, seed=1, smoothing=0.1, start_epoch=0, target_bleu=21.8, workers=0, world_size=1)
+:::MLPv0.5.0 gnmt 1581085265.403244972 (train.py:187) run_set_random_seed
+:::MLPv0.5.0 gnmt 1581085269.618380070 (train.py:217) preproc_tokenize_training
+:::MLPv0.5.0 gnmt 1581085269.618808746 (train.py:219) train_hp_max_sequence_length: 50
+:::MLPv0.5.0 gnmt 1581085389.041733980 (train.py:231) preproc_num_train_examples: 3498161
+:::MLPv0.5.0 gnmt 1581085389.544626474 (train.py:241) preproc_tokenize_eval
+:::MLPv0.5.0 gnmt 1581085389.635009527 (train.py:252) preproc_num_eval_examples: 3003
+:::MLPv0.5.0 gnmt 1581085389.635287762 (train.py:255) preproc_vocab_size: 32317
+:::MLPv0.5.0 gnmt 1581085389.635817289 (seq2seq/models/gnmt.py:19) model_hp_num_layers: 4
+:::MLPv0.5.0 gnmt 1581085389.636093378 (seq2seq/models/gnmt.py:21) model_hp_hidden_size: 1024
+:::MLPv0.5.0 gnmt 1581085389.636377335 (seq2seq/models/gnmt.py:23) model_hp_dropout: 0.2
+:::MLPv0.5.0 gnmt 1581085391.130823374 (train.py:170) model_hp_loss_fn: "Cross Entropy with label smoothing"
+:::MLPv0.5.0 gnmt 1581085391.131167650 (train.py:172) model_hp_loss_smoothing: 0.1
+:::MLPv0.5.0 gnmt 1581085396.222350121 (seq2seq/train/trainer.py:71) opt_name: "Adam"
+:::MLPv0.5.0 gnmt 1581085396.222679138 (seq2seq/train/trainer.py:73) opt_learning_rate: 0.0005
+:::MLPv0.5.0 gnmt 1581085396.222952366 (seq2seq/train/trainer.py:75) opt_hp_Adam_beta1: 0.9
+:::MLPv0.5.0 gnmt 1581085396.223213911 (seq2seq/train/trainer.py:77) opt_hp_Adam_beta2: 0.999
+:::MLPv0.5.0 gnmt 1581085396.223472834 (seq2seq/train/trainer.py:79) opt_hp_Adam_epsilon: 1e-08
+:::MLPv0.5.0 gnmt 1581085396.223940611 (seq2seq/inference/beam_search.py:30) eval_hp_beam_size: 5
+:::MLPv0.5.0 gnmt 1581085396.224264145 (seq2seq/inference/beam_search.py:32) eval_hp_max_sequence_length: 150
+:::MLPv0.5.0 gnmt 1581085396.224559307 (seq2seq/inference/beam_search.py:34) eval_hp_length_normalization_constant: 5.0
+:::MLPv0.5.0 gnmt 1581085396.224844217 (seq2seq/inference/beam_search.py:36) eval_hp_length_normalization_factor: 0.6
+:::MLPv0.5.0 gnmt 1581085396.225127459 (seq2seq/inference/beam_search.py:38) eval_hp_coverage_penalty_factor: 0.1
+:::MLPv0.5.0 gnmt 1581085396.226567507 (train.py:325) input_batch_size: 128
+:::MLPv0.5.0 gnmt 1581085396.226825953 (train.py:327) input_size: 3498112
+:::MLPv0.5.0 gnmt 1581085396.227103233 (train.py:345) eval_size: 3003
+:::MLPv0.5.0 gnmt 1581085396.227341413 (train.py:349) train_loop
+:::MLPv0.5.0 gnmt 1581085396.227581978 (train.py:352) train_epoch: 0
+:::MLPv0.5.0 gnmt 1581085396.757163763 (seq2seq/data/sampler.py:31) input_order
+:::MLPv0.5.0 gnmt 1581095795.455778360 (train.py:370) train_checkpoint
+:::MLPv0.5.0 gnmt 1581095812.675889730 (train.py:387) eval_start: 0
+:::MLPv0.5.0 gnmt 1581095868.674960136 (train.py:471) eval_accuracy: {"epoch": 0, "value": 19.39}
+:::MLPv0.5.0 gnmt 1581095868.675393820 (train.py:473) eval_target: 21.8
+:::MLPv0.5.0 gnmt 1581095868.675700903 (train.py:474) eval_stop
+:::MLPv0.5.0 gnmt 1581095868.676342964 (train.py:352) train_epoch: 1
+:::MLPv0.5.0 gnmt 1581095869.217078686 (seq2seq/data/sampler.py:31) input_order
+:::MLPv0.5.0 gnmt 1581106292.549782038 (train.py:370) train_checkpoint
+:::MLPv0.5.0 gnmt 1581106318.479393005 (train.py:387) eval_start: 1
+:::MLPv0.5.0 gnmt 1581106374.027038813 (train.py:471) eval_accuracy: {"epoch": 1, "value": 20.82}
+:::MLPv0.5.0 gnmt 1581106374.027453661 (train.py:473) eval_target: 21.8
+:::MLPv0.5.0 gnmt 1581106374.027763128 (train.py:474) eval_stop
+:::MLPv0.5.0 gnmt 1581106374.028290510 (train.py:352) train_epoch: 2
+:::MLPv0.5.0 gnmt 1581106374.562258005 (seq2seq/data/sampler.py:31) input_order
+:::MLPv0.5.0 gnmt 1581116801.532819510 (train.py:370) train_checkpoint
+:::MLPv0.5.0 gnmt 1581116828.173734903 (train.py:387) eval_start: 2
+:::MLPv0.5.0 gnmt 1581116883.353034258 (train.py:471) eval_accuracy: {"epoch": 2, "value": 21.43}
+:::MLPv0.5.0 gnmt 1581116883.353470802 (train.py:473) eval_target: 21.8
+:::MLPv0.5.0 gnmt 1581116883.353798628 (train.py:474) eval_stop
+:::MLPv0.5.0 gnmt 1581116883.354379892 (train.py:352) train_epoch: 3
+:::MLPv0.5.0 gnmt 1581116883.901247740 (seq2seq/data/sampler.py:31) input_order
+:::MLPv0.5.0 gnmt 1581127315.029956102 (train.py:370) train_checkpoint
+:::MLPv0.5.0 gnmt 1581127345.689068317 (train.py:387) eval_start: 3
+:::MLPv0.5.0 gnmt 1581127398.973191261 (train.py:471) eval_accuracy: {"epoch": 3, "value": 21.73}
+:::MLPv0.5.0 gnmt 1581127398.973571539 (train.py:473) eval_target: 21.8
+:::MLPv0.5.0 gnmt 1581127398.973873377 (train.py:474) eval_stop
+:::MLPv0.5.0 gnmt 1581127398.974373102 (train.py:352) train_epoch: 4
+:::MLPv0.5.0 gnmt 1581127399.519416094 (seq2seq/data/sampler.py:31) input_order
+:::MLPv0.5.0 gnmt 1581137822.410442829 (train.py:370) train_checkpoint
+:::MLPv0.5.0 gnmt 1581137836.480417728 (train.py:387) eval_start: 4
+:::MLPv0.5.0 gnmt 1581137891.708752632 (train.py:471) eval_accuracy: {"epoch": 4, "value": 22.12}
+:::MLPv0.5.0 gnmt 1581137891.709216595 (train.py:473) eval_target: 21.8
+:::MLPv0.5.0 gnmt 1581137891.709576130 (train.py:474) eval_stop
+:::MLPv0.5.0 gnmt 1581137891.721577168 (train.py:484) run_stop: {"success": true}
+:::MLPv0.5.0 gnmt 1581137891.721951246 (train.py:485) run_final
+ENDING TIMING RUN AT 2020-02-08 04:58:27 AM
+RESULT,RNN_TRANSLATOR,1,52648,,2020-02-07 02:20:59 PM
