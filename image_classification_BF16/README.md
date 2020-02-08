@@ -3,9 +3,9 @@
 ## docker building
 docker build . -t mlperf-nvidia:image_classification
 
-nvidia-docker run -it -v /home/nfs/dataset:/imn -v /root/ssy/training/image_classification/tensorflow:/research/tensorflow --name ssyIMN mlperf-nvidia:image_classification
-nvidia-docker start ssyIMN
-nvidia-docker exec -it ssyIMN /bin/bash
+nvidia-docker run -it -v /home/nfs/dataset:/imn -v /root/ssy/training/image_classification_BF16/tensorflow:/research/tensorflow --name ssyIMN_BF16 mlperf-nvidia:image_classification
+nvidia-docker start ssyIMN_BF16
+nvidia-docker exec -it ssyIMN_BF16 /bin/bash
 
 ## download and process data
 
@@ -16,7 +16,9 @@ the last is the script to convert imagenet
 and its data dir is all related scripts to be downloaded to my local data dir 
 
 in docker
-source download_and_preprocess_imagenet /imn
+cd /research/tensorflow/data
+# I may not need to rerun this when I copy the img die to imn_BF16
+source download_and_preprocess_imagenet.sh /imn
 CUDA_VISIBLE_DEVICES=7 ./run_and_time.sh 1 |tee l1
 
 
