@@ -76,7 +76,7 @@ class NeuMF(nn.Module):
             xmlp = nn.functional.relu(xmlp)
 
         x = torch.cat((xmf, xmlp), dim=1)
-        x = self.final(x)
+        x = bf16cutbp.apply(self.final(bf16cutfp.apply(x)))
         if sigmoid:
             x = nn.functional.sigmoid(x)
         return x

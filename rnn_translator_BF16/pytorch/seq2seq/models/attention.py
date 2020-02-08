@@ -5,6 +5,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn.parameter import Parameter
 
+# SSY
+from seq2seq.models.pgrad import *
 
 class BahdanauAttention(nn.Module):
     """
@@ -123,9 +125,11 @@ class BahdanauAttention(nn.Module):
         t_q = query.size(1)
 
         # FC layers to transform query and key
-        processed_query = self.linear_q(query)
+        processed_query = self.linear_q(bf16cutfp.apply(query))
+        processed_query=bf16cutbp.apply(processed_query)
         # TODO move this out of decoder for efficiency during inference
-        processed_key = self.linear_k(keys)
+        processed_key = self.linear_k(bf16cutfp.apply(keys))
+        processed_key = bf16cutbp.apply(processed_key)
 
         # scores: (b x t_q x t_k)
         scores = self.calc_score(processed_query, processed_key)
@@ -142,7 +146,8 @@ class BahdanauAttention(nn.Module):
         # the scores
         scores_normalized = self.dropout(scores_normalized)
         # context: (b x t_q x n)
-        context = torch.bmm(scores_normalized, keys)
+        context = torch.bmm(bf16cutfp.apply(scores_normalized), bf16cutfp.apply(keys))
+        context = bf16cutbp.apply(context)
 
         if single_query:
             context = context.squeeze(1)
