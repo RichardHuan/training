@@ -95,8 +95,8 @@ def train():
         biases = bias_variable([output_dim])
         variable_summaries(biases)
       with tf.name_scope('Wx_plus_b'):
-        preactivate1 = tf.matmul(id_bf16cut(input_tensor), weights) + biases
-        preactivate=id_bf16cut(preactivate1)
+        preactivate1 = tf.matmul(id_bf16cut_fp(input_tensor), weights) + biases
+        preactivate=id_bf16cut_bp(preactivate1)
         tf.summary.histogram('pre_activations', preactivate)
       activations = act(preactivate, name='activation')
       tf.summary.histogram('activations', activations)

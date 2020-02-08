@@ -12,5 +12,10 @@ grep "^Accuracy" l11_bf10_v100| awk '{print substr($4,1,length($4)-1) " "  $5}' 
 grep "^Accuracy" l12_bf9_v100| awk '{print substr($4,1,length($4)-1) " "  $5}' > a12_bf9_v100
 grep "^Accuracy" l13_bf8_v100| awk '{print substr($4,1,length($4)-1) " "  $5}' > a13_bf8_v100
 grep "^Accuracy" l14_bf7_v100| awk '{print substr($4,1,length($4)-1) " "  $5}' > a14_bf7_v100
+grep "^Accuracy" l15_bf16_fpbp_v100| awk '{print substr($4,1,length($4)-1) " "  $5}' > a15_bf16_fpbp_v100
+grep "^Accuracy" l16_bf12_fpbp_v100| awk '{print substr($4,1,length($4)-1) " "  $5}' > a16_bf12_fpbp_v100
+grep "^Accuracy" l17_bf10_fpbp_v100| awk '{print substr($4,1,length($4)-1) " "  $5}' > a17_bf10_fpbp_v100
+grep "^Accuracy" l18_bf9_fpbp_v100| awk '{print substr($4,1,length($4)-1) " "  $5}' > a18_bf9_fpbp_v100
+grep "^Accuracy" l19_bf8_fpbp_v100| awk '{print substr($4,1,length($4)-1) " "  $5}' > a19_bf8_fpbp_v100
 
-gnuplot -p -e 'set xlabel "Epoch";set ylabel "Accuracy";set key right bottom;set yrange [0.7:1] ; plot "a1_fp32_v100" u 1:2 w linesp, "a5_bf16_v100" u 1:2 w linesp, "a10_bf11_v100" u 1:2 w linesp title "3 bits mantissa","a12_bf9_v100" u 1:2 w linesp title "1 bit mantissa","a13_bf8_v100" u 1:2 w linesp title "1 bit leading 1 and no mantissa"'
+gnuplot -p -e 'set xlabel "Epoch";set ylabel "Accuracy";set key right bottom;set yrange [0.8:0.97] ; plot "a1_fp32_v100" u 1:2 w linesp title "fp32", "a15_bf16_fpbp_v100" u 1:2 w linesp title "bf16 8 bit mantissa", "a16_bf12_fpbp_v100" u 1:2 w linesp title "4 bit mantissa", "a17_bf10_fpbp_v100" u 1:2 w linesp title "2 bit mantissa", "a18_bf9_fpbp_v100" u 1:2 w linesp title "1 bit mantissa", "a19_bf8_fpbp_v100" u 1:2 w linesp title "leading 1 without mantissa"'
