@@ -10,9 +10,9 @@ def float2bf16_(xmlp):
         b_exp=torch.floor(a) # exp value
         rnd2exp=torch.pow(2,b_exp) # get back the old value rounded to 2 exp
         mantis=torch.div(aabs,rnd2exp) # mantis
-        m256=torch.mul(mantis,16)
+        m256=torch.mul(mantis,256)
         f256=torch.floor(m256)
-        d256=torch.div(f256,16)
+        d256=torch.div(f256,256)
         res=torch.mul(d256,rnd2exp)
         res1= torch.mul(res,ssign)
         # already debug to remove nan from log(0)
