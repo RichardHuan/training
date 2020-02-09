@@ -14,5 +14,5 @@ python3 -m multiproc train.py \
   --dataset-dir ${DATASET_DIR} \
   --seed $SEED \
   --target-bleu $TARGET \
-  --epochs 8 \
+  --epochs 20 \
   --batch-size 128
