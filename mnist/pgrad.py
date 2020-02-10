@@ -6,50 +6,68 @@ import numpy as np
 #def bf16cut_tf(xmlp):
 #  return xmlp
 
-def bf16cut_tf_(xmlp):
-  ssign=tf.sign(xmlp)
-  aabs=tf.abs(xmlp)
-  a=tf.where(tf.equal(aabs,0.0),aabs,
-     tf.divide(tf.log(aabs),tf.log(2.0)))
-  b_exp=tf.floor(a) # exp value
-  rnd2exp=tf.pow(2.0,b_exp) # get back the old value rounded to 2 exp
-  mantis=tf.divide(aabs,rnd2exp) # mantis
-  m256=tf.multiply(mantis,256.0)
-  f256=tf.floor(m256)
-  d256=tf.divide(f256,256.0)
-  res=tf.multiply(d256,rnd2exp)
-  res1= tf.multiply(res,ssign)
-  return res1
-
-def bf16cut_np_(xmlp):
-  ssign=np.sign(xmlp)
-  aabs=np.abs(xmlp)
-  a=np.where(aabs==0.0,0.0,np.log2(aabs))
-  b_exp=np.floor(a) # exp value
-  rnd2exp=np.power(2.0,b_exp) # get back the old value rounded to 2 exp
-  mantis=np.divide(aabs,rnd2exp) # mantis
-  m256=np.multiply(mantis,256.0)
-  f256=np.floor(m256)
-  d256=np.divide(f256,256.0)
-  res=np.multiply(d256,rnd2exp)
-  res1= np.multiply(res,ssign)
-  return res1
+#def bf16cut_tf_(xmlp):
+#  ssign=tf.sign(xmlp)
+#  aabs=tf.abs(xmlp)
+#  a=tf.where(tf.equal(aabs,0.0),aabs,
+#     tf.divide(tf.log(aabs),tf.log(2.0)))
+#  b_exp=tf.floor(a) # exp value
+#  rnd2exp=tf.pow(2.0,b_exp) # get back the old value rounded to 2 exp
+#  mantis=tf.divide(aabs,rnd2exp) # mantis
+#  m256=tf.multiply(mantis,256.0)
+#  f256=tf.floor(m256)
+#  d256=tf.divide(f256,256.0)
+#  res=tf.multiply(d256,rnd2exp)
+#  res1= tf.multiply(res,ssign)
+#  return res1
+#
+#def bf16cut_np_(xmlp):
+#  ssign=np.sign(xmlp)
+#  aabs=np.abs(xmlp)
+#  a=np.where(aabs==0.0,0.0,np.log2(aabs))
+#  b_exp=np.floor(a) # exp value
+#  rnd2exp=np.power(2.0,b_exp) # get back the old value rounded to 2 exp
+#  mantis=np.divide(aabs,rnd2exp) # mantis
+#  m256=np.multiply(mantis,256.0)
+#  f256=np.floor(m256)
+#  d256=np.divide(f256,256.0)
+#  res=np.multiply(d256,rnd2exp)
+#  res1= np.multiply(res,ssign)
+#  return res1
 
 def bf16cut_np(xmlp):
   fp32a = np.asarray(xmlp,dtype=np.float32)
   bits = fp32a.view(np.int32)
+  # for bf16 8 bit mantis
   b = np.left_shift(np.right_shift(bits,15),15)
-  return fp32a
+  # for bf12 4 bit mantis
+  #b = np.left_shift(np.right_shift(bits,19),19)
+  # for bf10 2 bit mantis
+  #b = np.left_shift(np.right_shift(bits,21),21)
+  # for bf9 1 bit mantis
+  #b = np.left_shift(np.right_shift(bits,22),22)
+  # for bf8 0 bit mantis
+  #b = np.left_shift(np.right_shift(bits,23),23)
+  return b.view(np.float32)
 
 def bf16cut_tf(xmlp):
   aabs=tf.abs(xmlp)
   rnd2exp=tf.pow(2.0,tf.floor(tf.where(tf.equal(aabs,0.0),aabs, tf.divide(tf.log(aabs),tf.log(2.0))))) # get back the old value rounded to 2 exp
+  # for bf16 8 bit mantis
   return  tf.multiply(tf.multiply(tf.divide(tf.floor(tf.multiply(tf.divide(aabs,rnd2exp),256.0)),256.0),rnd2exp),tf.sign(xmlp))
+  # for bf12 4 bit mantis
+  #return  tf.multiply(tf.multiply(tf.divide(tf.floor(tf.multiply(tf.divide(aabs,rnd2exp),16.0)),16.0),rnd2exp),tf.sign(xmlp))
+  # for bf10 2 bit mantis
+  #return  tf.multiply(tf.multiply(tf.divide(tf.floor(tf.multiply(tf.divide(aabs,rnd2exp),4.0)),4.0),rnd2exp),tf.sign(xmlp))
+  # for bf9 1 bit mantis
+  #return  tf.multiply(tf.multiply(tf.divide(tf.floor(tf.multiply(tf.divide(aabs,rnd2exp),2.0)),2.0),rnd2exp),tf.sign(xmlp))
+  # for bf8 0 bit mantis
+  #return  tf.multiply(tf.multiply(tf.divide(tf.floor(tf.multiply(tf.divide(aabs,rnd2exp),1.0)),1.0),rnd2exp),tf.sign(xmlp))
 
-def bf16cut_np_merge(xmlp):
-  aabs=np.abs(xmlp)
-  rnd2exp=np.power(2.0,np.floor(np.where(aabs==0.0,0.0,np.log2(aabs)))) # get back the old value rounded to 2 exp
-  return np.multiply(np.multiply(np.divide(np.floor(np.multiply(np.divide(aabs,rnd2exp),256.0)),256.0),rnd2exp),np.sign(xmlp))
+#def bf16cut_np_merge(xmlp):
+#  aabs=np.abs(xmlp)
+#  rnd2exp=np.power(2.0,np.floor(np.where(aabs==0.0,0.0,np.log2(aabs)))) # get back the old value rounded to 2 exp
+#  return np.multiply(np.multiply(np.divide(np.floor(np.multiply(np.divide(aabs,rnd2exp),256.0)),256.0),rnd2exp),np.sign(xmlp))
 
 
 def id_ssy(xmlp):
