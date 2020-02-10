@@ -8,6 +8,9 @@ set -e
 export PYTHONPATH="$(pwd):${PYTHONPATH}"
 
 MODEL_DIR="/tmp/resnet_imagenet_${RANDOM_SEED}"
+# SSY
+# avoid resume running
+rm -rf $MODEL_DIR
 
 # this is for 1 gpu
 python3 official/resnet/imagenet_main.py $RANDOM_SEED --data_dir /imn/  \

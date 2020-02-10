@@ -24,7 +24,7 @@ pip3 install "tensorflow-gpu==1.8"
 
 # START
 ## on host
-sudo nvidia-docker start ssyMNIST
+nvidia-docker start ssyMNIST
 nvidia-docker exec -it ssyMNIST /bin/bash
 
 ## on docker
@@ -32,4 +32,4 @@ cd /research/mnist
 source env.sh
 
 ## run
-CUDA_VISIBLE_DEVICES=7 python3 mnist_with_summaries.py 
+CUDA_VISIBLE_DEVICES=6 python3 mnist_with_summaries_bf16.py

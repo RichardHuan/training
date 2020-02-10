@@ -36,6 +36,7 @@ import tensorflow as tf
 from mlperf_compliance import mlperf_log
 from mlperf_compliance import resnet_log_helper
 
+from pgrad import *
 
 _BATCH_NORM_DECAY = 0.9
 _BATCH_NORM_EPSILON = 1e-5
@@ -90,7 +91,7 @@ def fixed_padding(inputs, kernel_size, data_format):
                                     [pad_beg, pad_end], [0, 0]])
   return padded_inputs
 
-
+# SSY
 def conv2d_fixed_padding(inputs, filters, kernel_size, strides, data_format):
   """Strided 2-D convolution with explicit padding."""
   # The padding is consistent and is based only on `kernel_size`, not on the
@@ -100,13 +101,14 @@ def conv2d_fixed_padding(inputs, filters, kernel_size, strides, data_format):
   if strides > 1:
     inputs = fixed_padding(inputs, kernel_size, data_format)
 
+  inputs=tf.reshape(id_bf16cut_fp(inputs),tf.shape(inputs))
   outputs = tf.layers.conv2d(
       inputs=inputs, filters=filters, kernel_size=kernel_size, strides=strides,
       padding=('SAME' if strides == 1 else 'VALID'), use_bias=False,
       kernel_initializer=tf.variance_scaling_initializer(
           distribution="truncated_normal"),
       data_format=data_format)
-
+  outputs = tf.reshape(id_bf16cut_bp(outputs),tf.shape(outputs))
   resnet_log_helper.log_conv2d(
       input_tensor=inputs_for_logging, output_tensor=outputs, stride=strides,
       filters=filters, initializer=mlperf_log.TRUNCATED_NORMAL, use_bias=False)
@@ -126,7 +128,7 @@ def _building_block_v2(inputs, filters, training, projection_shortcut, strides,
                        data_format):
   raise NotImplementedError
 
-
+# SSY
 def _bottleneck_block_v1(inputs, filters, training, projection_shortcut,
                          strides, data_format):
   """A single block for ResNet v1, with a bottleneck.
@@ -158,6 +160,7 @@ def _bottleneck_block_v1(inputs, filters, training, projection_shortcut,
 
   shortcut = inputs
 
+  # SSY projection_shortcut
   if projection_shortcut is not None:
     shortcut = projection_shortcut(inputs)
     resnet_log_helper.log_projection(input_tensor=inputs,
@@ -165,6 +168,7 @@ def _bottleneck_block_v1(inputs, filters, training, projection_shortcut,
     shortcut = batch_norm(inputs=shortcut, training=training,
                           data_format=data_format)
 
+  # SSY conv2d_fixed_padding
   inputs = conv2d_fixed_padding(
       inputs=inputs, filters=filters, kernel_size=1, strides=1,
       data_format=data_format)
@@ -173,6 +177,7 @@ def _bottleneck_block_v1(inputs, filters, training, projection_shortcut,
   mlperf_log.resnet_print(key=mlperf_log.MODEL_HP_RELU)
   inputs = tf.nn.relu(inputs)
 
+  # SSY conv2d_fixed_padding
   inputs = conv2d_fixed_padding(
       inputs=inputs, filters=filters, kernel_size=3, strides=strides,
       data_format=data_format)
@@ -181,6 +186,7 @@ def _bottleneck_block_v1(inputs, filters, training, projection_shortcut,
   mlperf_log.resnet_print(key=mlperf_log.MODEL_HP_RELU)
   inputs = tf.nn.relu(inputs)
 
+  # SSY conv2d_fixed_padding
   inputs = conv2d_fixed_padding(
       inputs=inputs, filters=4 * filters, kernel_size=1, strides=1,
       data_format=data_format)
@@ -227,16 +233,19 @@ def block_layer(inputs, filters, bottleneck, block_fn, blocks, strides,
   # Bottleneck blocks end with 4x the number of filters as they start with
   filters_out = filters * 4 if bottleneck else filters
 
+  # SSY
   def projection_shortcut(inputs):
     return conv2d_fixed_padding(
         inputs=inputs, filters=filters_out, kernel_size=1, strides=strides,
         data_format=data_format)
 
   # Only the first block per block_layer uses projection_shortcut and strides
+  # SSY block_fn
   inputs = block_fn(inputs, filters, training, projection_shortcut, strides,
                     data_format)
 
   for _ in range(1, blocks):
+    # SSY block_fn
     inputs = block_fn(inputs, filters, training, None, 1, data_format)
 
   return tf.identity(inputs, name)
@@ -296,6 +305,7 @@ class Model(object):
           'Resnet version should be 1 or 2. See README for citations.')
 
     self.bottleneck = bottleneck
+    # SSY block_fn
     if bottleneck:
       if version == 1:
         self.block_fn = _bottleneck_block_v1
@@ -402,6 +412,7 @@ class Model(object):
         # https://www.tensorflow.org/performance/performance_guide#data_formats
         inputs = tf.transpose(inputs, [0, 3, 1, 2])
 
+      # SSY 
       inputs = conv2d_fixed_padding(
           inputs=inputs, filters=self.num_filters, kernel_size=self.kernel_size,
           strides=self.conv_stride, data_format=self.data_format)
@@ -427,6 +438,7 @@ class Model(object):
 
       for i, num_blocks in enumerate(self.block_sizes):
         num_filters = self.num_filters * (2**i)
+        # SSY block_fn block_layer
         inputs = block_layer(
             inputs=inputs, filters=num_filters, bottleneck=self.bottleneck,
             block_fn=self.block_fn, blocks=num_blocks,
@@ -453,10 +465,13 @@ class Model(object):
       inputs = tf.reshape(inputs, [-1, self.final_size])
       mlperf_log.resnet_print(key=mlperf_log.MODEL_HP_DENSE,
                               value=self.num_classes)
+      # SSY
+      inputs = tf.reshape(id_bf16cut_fp(inputs),tf.shape(inputs))
       inputs = tf.layers.dense(
         inputs=inputs,
         units=self.num_classes,
         kernel_initializer=tf.random_normal_initializer(stddev=.01))
+      inputs = tf.reshape(id_bf16cut_bp(inputs),tf.shape(inputs))
       inputs = tf.identity(inputs, 'final_dense')
 
       # Drop batch size from shape logging.

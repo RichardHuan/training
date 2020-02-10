@@ -192,6 +192,8 @@ def get_synth_input_fn():
 ###############################################################################
 # Running the model
 ###############################################################################
+# SSY calling base class
+# official/resnet/resnet_model.py
 class ImagenetModel(resnet_model.Model):
   """Model class with appropriate defaults for Imagenet data."""
 
@@ -272,7 +274,7 @@ def _get_block_sizes(resnet_size):
                resnet_size, choices.keys()))
     raise ValueError(err)
 
-
+# SSY where define model
 def imagenet_model_fn(features, labels, mode, params):
   """Our model_fn for ResNet to be used with our Estimator."""
 
@@ -293,7 +295,7 @@ def imagenet_model_fn(features, labels, mode, params):
       features=features,
       labels=labels,
       mode=mode,
-      model_class=ImagenetModel,
+      model_class=ImagenetModel, # SSY real model class
       resnet_size=params['resnet_size'],
       weight_decay=params['weight_decay'],
       learning_rate_fn=learning_rate_fn,

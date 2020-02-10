@@ -19,7 +19,7 @@ in docker
 cd /research/tensorflow/data
 # I may not need to rerun this when I copy the img die to imn_BF16
 source download_and_preprocess_imagenet.sh /imn
-CUDA_VISIBLE_DEVICES=7 ./run_and_time.sh 1 |tee l1
+CUDA_VISIBLE_DEVICES=6 ./run_and_time.sh 1 |tee l1
 
 
     cd ~/reference/image_classification/tensorflow/

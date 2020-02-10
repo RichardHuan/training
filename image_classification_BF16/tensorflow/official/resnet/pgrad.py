@@ -35,12 +35,18 @@ def bf16cut_np_(xmlp):
   res1= np.multiply(res,ssign)
   return res1
 
+def bf16cut_np(xmlp):
+  fp32a = np.asarray(xmlp,dtype=np.float32)
+  bits = fp32a.view(np.int32)
+  b = np.left_shift(np.right_shift(bits,15),15)
+  return fp32a
+
 def bf16cut_tf(xmlp):
   aabs=tf.abs(xmlp)
   rnd2exp=tf.pow(2.0,tf.floor(tf.where(tf.equal(aabs,0.0),aabs, tf.divide(tf.log(aabs),tf.log(2.0))))) # get back the old value rounded to 2 exp
   return  tf.multiply(tf.multiply(tf.divide(tf.floor(tf.multiply(tf.divide(aabs,rnd2exp),256.0)),256.0),rnd2exp),tf.sign(xmlp))
 
-def bf16cut_np(xmlp):
+def bf16cut_np_merge(xmlp):
   aabs=np.abs(xmlp)
   rnd2exp=np.power(2.0,np.floor(np.where(aabs==0.0,0.0,np.log2(aabs)))) # get back the old value rounded to 2 exp
   return np.multiply(np.multiply(np.divide(np.floor(np.multiply(np.divide(aabs,rnd2exp),256.0)),256.0),rnd2exp),np.sign(xmlp))
@@ -75,7 +81,7 @@ def id_bf16cut_fp(x, name=None):
     
     with ops.op_scope([x], name, "id_bf16cut_fp") as name:
         #sqr_x = py_func(np.square,
-        sqr_x = py_func(bf16cut_np, # must use np version orelse will rise unsupport  data type
+        sqr_x = py_func(bf16cut_np, # must use np version orelse will rise unsupport  data type, change to id_ssy will be as fast as no custom oprator case, so np instead of H2D/D2H is the reason that slow down custom operator
                         [x],
                         [tf.float32],
                         name=name,

@@ -217,7 +217,7 @@ def learning_rate_with_decay(
 
   return learning_rate_fn
 
-
+# SSY model definition
 def resnet_model_fn(features, labels, mode, model_class,
                     resnet_size, weight_decay, learning_rate_fn, momentum,
                     data_format, version, loss_scale, loss_filter_fn=None,
@@ -269,6 +269,7 @@ def resnet_model_fn(features, labels, mode, model_class,
 
   features = tf.cast(features, dtype)
 
+  # SSY calling model class
   model = model_class(resnet_size, data_format, version=version, dtype=dtype)
 
   logits = model(features, mode == tf.estimator.ModeKeys.TRAIN)
