@@ -1,11 +1,61 @@
 # SSY
 
-## build docker
+## build docker Dockerfile
 nvidia-docker build . -t mlperf/object_detection
 
-nvidia-docker run -it -v /coco:/coco --ipc=host -v /root/ssy/training/single_stage_detector_old2/ssd:/mlperf/ssd --name ssySSD mlperf-nvidia:single_stage_detector
-nvidia-docker start ssySSD
-nvidia-docker exec -it ssySSD /bin/bash
+nvidia-docker run -it --ipc=host -v /root/ssy:/root/ssy --name ssyFRCNN mlperf/object_detection
+nvidia-docker start ssyFRCNN
+nvidia-docker exec -it ssyFRCNN /bin/bash
+
+# build coco api
+cd /root/ssy/
+source /root/ssy/training/env.sh
+git config --global http.sslVerify false
+
+# this must be exec in host
+git clone https://github.com/cocodataset/cocoapi.git \
+ && cd cocoapi/PythonAPI \
+ && git reset --hard ed842bffd41f6ff38707c4f0968d2cfd91088688
+
+# back to docker
+# build cocoapi
+cd /root/ssy/cocoapi/PythonAPI/
+python setup.py build_ext install
+cd /root/ssy/training/object_detection/pytorch/
+
+conda create --name maskrcnn_benchmark
+source activate maskrcnn_benchmark
+
+conda install ipython
+
+pip install ninja yacs cython matplotlib
+
+# build torchvision
+# back to host 
+cd /root/ssy/
+git clone https://github.com/pytorch/vision.git
+# back to docker
+cd /root/ssy/vision
+# only v0.2.2 work with pytorch 1.00
+git checkout v0.2.2
+python setup.py install
+
+# build maskrcnn_benchmark
+# back to host
+cd /root/ssy/maskrcnn-benchmark/
+git clone https://github.com/facebookresearch/maskrcnn-benchmark.git
+# back to docker
+python setup.py build develop  
+
+
+# real run
+cd /root/ssy/training/object_detection/pytorch/
+
+
+
+
+
+
 
 # 1. Problem
 Object detection and segmentation. Metrics are mask and box mAP.

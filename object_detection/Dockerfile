@@ -15,7 +15,7 @@ RUN apt-get install -y apt-utils=1.2.29ubuntu0.1 \
                        libsm6=2:1.2.2-1 \
                        libxext6=2:1.3.3-1 \
                        libxrender-dev=1:0.9.9-0ubuntu1
-
+RUN apt-get install -y vim
 RUN pip install ninja==1.8.2.post2 \
                 yacs==0.1.5 \
                 cython==0.29.5 \
@@ -25,11 +25,12 @@ RUN pip install ninja==1.8.2.post2 \
                 torchvision==0.2.2
 
 # install pycocotools
-RUN git config --global http.sslVerify false
-RUN git clone https://github.com/cocodataset/cocoapi.git \
- && cd cocoapi/PythonAPI \
- && git reset --hard ed842bffd41f6ff38707c4f0968d2cfd91088688 \
- && python setup.py build_ext install
+# git is too old, I need newer version from host
+#RUN git config --global http.sslVerify false
+#RUN git clone https://github.com/cocodataset/cocoapi.git \
+# && cd cocoapi/PythonAPI \
+# && git reset --hard ed842bffd41f6ff38707c4f0968d2cfd91088688 \
+# && python setup.py build_ext install
 
 # For information purposes only, these are the versions of the packages which we've successfully used:
 # $ pip list

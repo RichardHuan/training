@@ -58,5 +58,13 @@ bazel build --config=opt --config=cuda //tensorflow/tools/pip_package:build_pip_
 # above command may met with http_archive url can not be download through https
 # I just wget --no-check-certificate them to dstdir
 # and add --distdir=dstdir
+bazel build --config=opt --distdir=dstdir //tensorflow/tools/pip_package:build_pip_package
 
+# build pip packet
+./bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
 
+# install
+pip install /tmp/tensorflow_pkg/tensorflow-1.15.2-cp35-cp35m-linux_x86_64.whl
+
+## run
+CUDA_VISIBLE_DEVICES=6 python3 mnist_with_summaries_bf16.py
