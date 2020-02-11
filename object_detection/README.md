@@ -1,3 +1,12 @@
+# SSY
+
+## build docker
+nvidia-docker build . -t mlperf/object_detection
+
+nvidia-docker run -it -v /coco:/coco --ipc=host -v /root/ssy/training/single_stage_detector_old2/ssd:/mlperf/ssd --name ssySSD mlperf-nvidia:single_stage_detector
+nvidia-docker start ssySSD
+nvidia-docker exec -it ssySSD /bin/bash
+
 # 1. Problem
 Object detection and segmentation. Metrics are mask and box mAP.
 

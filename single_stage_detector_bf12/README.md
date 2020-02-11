@@ -5,12 +5,12 @@
 cd reference/single_stage_detector/
 source download_dataset.sh
 
-## building docker
+## building docker Dockerfile
 docker build . -t mlperf-nvidia:single_stage_detector
 
-nvidia-docker run -it -v /coco:/coco --ipc=host -v /root/ssy/training/single_stage_detector_old2_bf12/ssd:/mlperf/ssd --name ssySSD_BF12 mlperf-nvidia:single_stage_detector
-nvidia-docker start ssySSD_BF12
-nvidia-docker exec -it ssySSD_BF12 /bin/bash
+nvidia-docker run -it --ipc=host -v /root/ssy:/root/ssy --name ssySSD mlperf-nvidia:single_stage_detector
+nvidia-docker start ssySSD
+nvidia-docker exec -it ssySSD /bin/bash
 
 # modify torchvision resnet https to http
 

@@ -2,10 +2,16 @@ FROM pytorch/pytorch:1.0.1-cuda10.0-cudnn7-devel
 
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
+ENV  HTTP_PROXY=http://172.17.0.1:3128
+ENV  HTTPS_PROXY=https://172.17.0.1:3128
+ENV  http_proxy=http://172.17.0.1:3128
+ENV  https_proxy=https://172.17.0.1:3128
+
 # install basics
-RUN apt-get update -y \
- && apt-get install -y apt-utils=1.2.29ubuntu0.1 \
-                       libglib2.0-0=2.48.2-0ubuntu4.1 \
+RUN apt-get update -o Acquire::https::developer.download.nvidia.com::Verify-Peer=false
+RUN apt-get install -y apt-utils=1.2.29ubuntu0.1 \
+                       #libglib2.0-0=2.48.2-0ubuntu4.1 \
+                       libglib2.0-0 \
                        libsm6=2:1.2.2-1 \
                        libxext6=2:1.3.3-1 \
                        libxrender-dev=1:0.9.9-0ubuntu1
@@ -19,6 +25,7 @@ RUN pip install ninja==1.8.2.post2 \
                 torchvision==0.2.2
 
 # install pycocotools
+RUN git config --global http.sslVerify false
 RUN git clone https://github.com/cocodataset/cocoapi.git \
  && cd cocoapi/PythonAPI \
  && git reset --hard ed842bffd41f6ff38707c4f0968d2cfd91088688 \
