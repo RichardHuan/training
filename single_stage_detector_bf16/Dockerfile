@@ -1,1 +1,1 @@
-single_stage_detector/Dockerfile
+/root/ssy/training/single_stage_detector/Dockerfile

@@ -1,1 +1,0 @@
-single_stage_detector/download_dataset.sh

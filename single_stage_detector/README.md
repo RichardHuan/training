@@ -15,8 +15,8 @@ nvidia-docker exec -it ssySSD /bin/bash
 # modify torchvision resnet https to http
 
 ## RUN
-cp model_zoo.py "/opt/conda/lib/python3.6/site-packages/torch/utils/model_zoo.py"
-source env.sh
+cp /root/ssy/training/single_stage_detector/ssd/model_zoo.py /opt/conda/lib/python3.6/site-packages/torch/utils/model_zoo.py
+source /root/ssy/training/env.sh
 CUDA_VISIBLE_DEVICES=3  ./run_and_time.sh 1 |tee l3
 # 1. Problem
 Object detection.

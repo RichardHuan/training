@@ -1,1 +1,1 @@
-single_stage_detector/requirements.txt
+/root/ssy/training/single_stage_detector/requirements.txt
