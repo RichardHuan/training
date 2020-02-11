@@ -7,5 +7,5 @@ grep eval_accuracy ../../rnn_translator_BF12/pytorch/l8_bf12_base25_epoch20_v100
 
 
 #gnuplot -p -e 'set key bottom right;set xlabel "Epoch";set ylabel "Accuracy";plot "a1_fp32_v100" u 1:2 w linesp, 25 title "target", "a2_bf16_v100" u 1:2 w linesp, "a3_fp32_base25_v100" u 1:2 w linesp, "a4_bf16_base25_v100" u 1:2 w linesp , "a5_bf16_base25_v100" u 1:2 w linesp'
-gnuplot -p -e 'set key bottom right;set xlabel "Epoch";set ylabel "Accuracy";plot "a1_fp32_v100" u 1:2 w linesp, "a2_bf16_v100" u 1:2 w linesp, "a3_fp32_base25_v100" u 1:2 w linesp, "a6_fp32_base25_epoch20_v100" u 1:2 w linesp, "a7_bf16_base25_epoch20_v100" u 1:2 w linesp , "a8_bf12_base25_epoch20_v100" u 1:2 w linesp'
+gnuplot -p -e 'set key bottom right;set xlabel "Epoch";set ylabel "Accuracy";plot 21.08 title "target" , "a1_fp32_v100" u 1:2 w linesp, "a2_bf16_v100" u 1:2 w linesp, "a3_fp32_base25_v100" u 1:2 w linesp, "a6_fp32_base25_epoch20_v100" u 1:2 w linesp, "a7_bf16_base25_epoch20_v100" u 1:2 w linesp , "a8_bf12_base25_epoch20_v100" u 1:2 w linesp'
 
