@@ -3,7 +3,11 @@ MODEL:
   WEIGHT: "catalog://ImageNetPretrained/MSRA/R-50"
   BACKBONE:
     CONV_BODY: "R-50-FPN"
-    OUT_CHANNELS: 256
+    #SSY start
+    #OUT_CHANNELS: 256
+  RESNETS:
+    BACKBONE_OUT_CHANNELS: 256
+    # SSY end
   RPN:
     USE_FPN: True
     ANCHOR_STRIDE: (4, 8, 16, 32, 64)
@@ -38,3 +42,10 @@ SOLVER:
   WEIGHT_DECAY: 0.0001
   STEPS: (60000, 80000)
   MAX_ITER: 90000
+#SSY start
+#PER_EPOCH_EVAL: True
+# /root/ssy/training/object_detection/pytorch/maskrcnn_benchmark/config/defaults.py
+#MLPERF:
+#  MIN_BBOX_MAP: 0.377
+#  MIN_SEGM_MAP: 0.339
+#SSY end

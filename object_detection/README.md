@@ -30,6 +30,21 @@ conda install ipython
 
 pip install ninja yacs cython matplotlib
 
+# need to install lower version of pillow to avoid 
+# cannot import name 'PILLOW_VERSION' from 'PIL' 
+conda install "pillow<7"
+conda install opencv
+conda install -c conda-forge yacs
+conda install -c conda-forge pycocotools 
+
+#apt upgrade libstdc++6 -o Acquire::https::developer.download.nvidia.com::Verify-Peer=false --fix-missing
+# adding test data to find GXXGLIBCXX_3.4.22, which is too new, current system only have GLIBCXX_3.4.21
+apt install software-properties-common
+add-apt-repository ppa:ubuntu-toolchain-r/test
+apt update -o Acquire::https::developer.download.nvidia.com::Verify-Peer=false
+apt upgrade libstdc++6
+conda install -c conda-forge nvidia-apex
+
 # build torchvision
 # back to host 
 cd /root/ssy/
@@ -42,15 +57,28 @@ python setup.py install
 
 # build maskrcnn_benchmark
 # back to host
-cd /root/ssy/maskrcnn-benchmark/
+cd /root/ssy/
 git clone https://github.com/facebookresearch/maskrcnn-benchmark.git
 # back to docker
+cd /root/ssy/maskrcnn-benchmark/
+cp /root/ssy/training/object_detection/pytorch/maskrcnn_benchmark/utils/mlperf_logger.py /root/ssy/maskrcnn-benchmark/maskrcnn_benchmark/utils/
+cp /root/ssy/training/object_detection/pytorch/maskrcnn_benchmark/engine/tester.py /root/ssy/maskrcnn-benchmark/maskrcnn_benchmark/engine
 python setup.py build develop  
+
+# on host
+cd /root/ssy/
+git clone https://github.com/mcordts/cityscapesScripts.git
+cd cityscapesScripts/
+# on docker
+python setup.py build_ext install
+
+cd /root/ssy/training/compliance
+python setup.py install
 
 
 # real run
 cd /root/ssy/training/object_detection/pytorch/
-
+CUDA_VISIBLE_DEVICES=0 ./run_and_time.sh |tee l1
 
 
 

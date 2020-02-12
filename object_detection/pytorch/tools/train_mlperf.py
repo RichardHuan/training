@@ -157,7 +157,9 @@ def train(cfg, local_rank, distributed):
     checkpointer = DetectronCheckpointer(
         cfg, model, optimizer, scheduler, output_dir, save_to_disk
     )
-    arguments["save_checkpoints"] = cfg.SAVE_CHECKPOINTS
+    # no such SAVE_CHECKPOINTS
+    #arguments["save_checkpoints"] = cfg.SAVE_CHECKPOINTS
+    arguments["save_checkpoints"] = False
 
     extra_checkpoint_data = checkpointer.load(cfg.MODEL.WEIGHT)
     arguments.update(extra_checkpoint_data)
@@ -166,24 +168,36 @@ def train(cfg, local_rank, distributed):
         cfg,
         is_train=True,
         is_distributed=distributed,
-        start_iter=arguments["iteration"],
+        start_iter=arguments["iteration"]
     )
 
     checkpoint_period = cfg.SOLVER.CHECKPOINT_PERIOD
 
     # set the callback function to evaluate and potentially
     # early exit each epoch
-    if cfg.PER_EPOCH_EVAL:
-        per_iter_callback_fn = functools.partial(
-                mlperf_test_early_exit,
-                iters_per_epoch=iters_per_epoch,
-                tester=functools.partial(test, cfg=cfg),
-                model=model,
-                distributed=distributed,
-                min_bbox_map=cfg.MLPERF.MIN_BBOX_MAP,
-                min_segm_map=cfg.MLPERF.MIN_SEGM_MAP)
-    else:
-        per_iter_callback_fn = None
+    # SSY
+    # I already add PER_EPOCH_EVAL and MIN_BBOX_MAP MIN_SEGM_MAP to  ./configs/e2e_mask_rcnn_R_50_FPN_1x.yaml
+    # but it still can not find it
+    # so I manually set them here
+    #if cfg.PER_EPOCH_EVAL:
+    #    per_iter_callback_fn = functools.partial(
+    #            mlperf_test_early_exit,
+    #            iters_per_epoch=iters_per_epoch,
+    #            tester=functools.partial(test, cfg=cfg),
+    #            model=model,
+    #            distributed=distributed,
+    #            min_bbox_map=cfg.MLPERF.MIN_BBOX_MAP,
+    #            min_segm_map=cfg.MLPERF.MIN_SEGM_MAP)
+    #else:
+    #    per_iter_callback_fn = None
+    per_iter_callback_fn = functools.partial(
+            mlperf_test_early_exit,
+            iters_per_epoch=iters_per_epoch,
+            tester=functools.partial(test, cfg=cfg),
+            model=model,
+            distributed=distributed,
+            min_bbox_map=0.377,
+            min_segm_map=0.339)
 
     start_train_time = time.time()
 

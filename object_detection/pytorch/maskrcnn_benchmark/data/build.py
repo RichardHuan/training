@@ -175,4 +175,6 @@ def make_data_loader(cfg, is_train=True, is_distributed=False, start_iter=0):
         assert len(data_loaders) == 1
         iterations_per_epoch = epoch_size // images_per_batch + 1
         return data_loaders[0], iterations_per_epoch
-    return data_loaders
+    # SSY
+    logger.warning("SSY : returning unintended 0")
+    return data_loaders , 0
