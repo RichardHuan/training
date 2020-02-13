@@ -36,7 +36,14 @@ import tensorflow as tf
 from mlperf_compliance import mlperf_log
 from mlperf_compliance import resnet_log_helper
 
-from pgrad import *
+# python version of bf16cut
+#from pgrad import *
+# CUDA version
+import bf16cut_fp_op
+import bf16cut_fp_grad_op
+import bf16cut_bp_op
+import bf16cut_bp_grad_op
+
 
 _BATCH_NORM_DECAY = 0.9
 _BATCH_NORM_EPSILON = 1e-5
@@ -101,14 +108,16 @@ def conv2d_fixed_padding(inputs, filters, kernel_size, strides, data_format):
   if strides > 1:
     inputs = fixed_padding(inputs, kernel_size, data_format)
 
-  inputs=tf.reshape(id_bf16cut_fp(inputs),tf.shape(inputs))
+  #inputs=tf.reshape(id_bf16cut_fp(inputs),tf.shape(inputs))
+  inputs=tf.reshape(bf16cut_fp_op.bf16cut_fp(inputs),tf.shape(inputs))
   outputs = tf.layers.conv2d(
       inputs=inputs, filters=filters, kernel_size=kernel_size, strides=strides,
       padding=('SAME' if strides == 1 else 'VALID'), use_bias=False,
       kernel_initializer=tf.variance_scaling_initializer(
           distribution="truncated_normal"),
       data_format=data_format)
-  outputs = tf.reshape(id_bf16cut_bp(outputs),tf.shape(outputs))
+  #outputs = tf.reshape(id_bf16cut_bp(outputs),tf.shape(outputs))
+  outputs = tf.reshape(bf16cut_bp_op.bf16cut_bp(outputs),tf.shape(outputs))
   resnet_log_helper.log_conv2d(
       input_tensor=inputs_for_logging, output_tensor=outputs, stride=strides,
       filters=filters, initializer=mlperf_log.TRUNCATED_NORMAL, use_bias=False)
@@ -466,12 +475,14 @@ class Model(object):
       mlperf_log.resnet_print(key=mlperf_log.MODEL_HP_DENSE,
                               value=self.num_classes)
       # SSY
-      inputs = tf.reshape(id_bf16cut_fp(inputs),tf.shape(inputs))
+      #inputs = tf.reshape(id_bf16cut_fp(inputs),tf.shape(inputs))
+      inputs = tf.reshape(bf16cut_fp_op.bf16cut_fp(inputs),tf.shape(inputs))
       inputs = tf.layers.dense(
         inputs=inputs,
         units=self.num_classes,
         kernel_initializer=tf.random_normal_initializer(stddev=.01))
-      inputs = tf.reshape(id_bf16cut_bp(inputs),tf.shape(inputs))
+      #inputs = tf.reshape(id_bf16cut_bp(inputs),tf.shape(inputs))
+      inputs = tf.reshape(bf16cut_bp_op.bf16cut_bp(inputs),tf.shape(inputs))
       inputs = tf.identity(inputs, 'final_dense')
 
       # Drop batch size from shape logging.

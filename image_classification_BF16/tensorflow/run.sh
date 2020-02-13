@@ -13,7 +13,7 @@ MODEL_DIR="/tmp/resnet_imagenet_${RANDOM_SEED}"
 rm -rf $MODEL_DIR
 
 # this is for 1 gpu
-python3 official/resnet/imagenet_main.py $RANDOM_SEED --data_dir /imn/  \
+python3 official/resnet/imagenet_main.py $RANDOM_SEED --data_dir /root/ssy/dataset/imagenet/  \
   --model_dir $MODEL_DIR --train_epochs 10000 --stop_threshold $QUALITY --batch_size 64 \
   --version 1 --resnet_size 50 --epochs_between_evals 4
 
