@@ -78,6 +78,8 @@ python setup.py install
 
 # real run
 cd /root/ssy/training/object_detection/pytorch/
+# to avoid linspace use float64 as int
+cp  /root/ssy/cocoapi/PythonAPI/pycocotools/cocoeval.py "/opt/conda/envs/maskrcnn_benchmark/lib/python3.7/site-packages/pycocotools/cocoeval.py"
 CUDA_VISIBLE_DEVICES=0 ./run_and_time.sh |tee l1
 
 

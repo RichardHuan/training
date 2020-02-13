@@ -33,7 +33,13 @@ import tensorflow as tf
 
 from tensorflow.examples.tutorials.mnist import input_data
 
-from pgrad import *
+# python bf16cut operator
+#from pgrad import *
+# cuda bf16cut operator
+import bf16cut_fp_op
+import bf16cut_fp_grad_op
+import bf16cut_bp_op
+import bf16cut_bp_grad_op
 FLAGS = None
 
 
@@ -95,9 +101,11 @@ def train():
         biases = bias_variable([output_dim])
         variable_summaries(biases)
       with tf.name_scope('Wx_plus_b'):
-        input_tensor = id_bf16cut_fp(input_tensor)
+        #input_tensor = id_bf16cut_fp(input_tensor)
+        input_tensor = bf16cut_fp_op.bf16cut_fp(input_tensor)
         preactivate = tf.matmul(input_tensor, weights) + biases
-        preactivate=id_bf16cut_bp(preactivate)
+        #preactivate=id_bf16cut_bp(preactivate)
+        preactivate=bf16cut_bp_op.bf16cut_bp(preactivate)
         tf.summary.histogram('pre_activations', preactivate)
       activations = act(preactivate, name='activation')
       tf.summary.histogram('activations', activations)
