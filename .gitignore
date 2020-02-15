@@ -5,3 +5,6 @@ __pycache__/
 model.ckpt-*
 *.tmp
 *.swp
+*.so
+*.nvvp
+
