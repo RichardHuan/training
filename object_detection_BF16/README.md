@@ -3,37 +3,40 @@
 ## build docker Dockerfile
 nvidia-docker build . -t mlperf/object_detection
 
-nvidia-docker run -it --ipc=host -v /root/ssy:/root/ssy --name ssyFRCNN mlperf/object_detection
-nvidia-docker start ssyFRCNN
-nvidia-docker exec -it ssyFRCNN /bin/bash
+nvidia-docker run -it --ipc=host -v /root/ssy:/root/ssy --name ssyFRCNN_BF16 mlperf/object_detection
+nvidia-docker start ssyFRCNN_BF16
+nvidia-docker exec -it ssyFRCNN_BF16 /bin/bash
 
 # build coco api
 cd /root/ssy/
 source /root/ssy/training/env.sh
 git config --global http.sslVerify false
-conda update -n base -c defaults conda
+# this may leads to soling failed
+#conda update -n base -y -c defaults conda
 
 conda create --name maskrcnn_benchmark
 source activate maskrcnn_benchmark
 
-
 apt install -y vim
-
+conda install -y numpy
 # this must be exec in host
 # I chose to use newest version
-git clone https://github.com/cocodataset/cocoapi.git 
+#git clone https://github.com/cocodataset/cocoapi.git 
+cd /root/ssy/ssynew/
+git clone https://github.com/shengyushen/cocoapi.git 
 #git clone https://github.com/cocodataset/cocoapi.git \
 # && cd cocoapi/PythonAPI \
 # && git reset --hard ed842bffd41f6ff38707c4f0968d2cfd91088688
 
 # back to docker
 # build cocoapi
-cd /root/ssy/cocoapi/PythonAPI/
+cd /root/ssy/ssynew/cocoapi/PythonAPI/
 python setup.py build_ext install
-cd /root/ssy/training/object_detection/pytorch/
+cd /root/ssy/training/object_detection_BF16/pytorch/
 
+conda install -y ipython 
 # this should give me 1.3.1
-conda install -y ipython pytorch torchvision
+conda install -y  pytorch torchvision
 
 # need to install lower version of pillow to avoid 
 # cannot import name 'PILLOW_VERSION' from 'PIL' 
@@ -43,25 +46,30 @@ conda install -y  -c conda-forge yacs pycocotools nvidia-apex
 
 cd /root/ssy/training/compliance
 python setup.py install
-cd /root/ssy/training/object_detection/pytorch/
+cd /root/ssy/training/object_detection_BF16/pytorch/
 
 # build maskrcnn_benchmark
 # back to host
-cd /root/ssy/
-git clone https://github.com/facebookresearch/maskrcnn-benchmark.git
+cd /root/ssy/ssynew
+git clone https://github.com/shengyushen/maskrcnn-benchmark.git
 # back to docker
-cp /root/ssy/training/object_detection/pytorch/maskrcnn_benchmark/utils/mlperf_logger.py /root/ssy/maskrcnn-benchmark/maskrcnn_benchmark/utils/
-cp /root/ssy/training/object_detection/pytorch/maskrcnn_benchmark/engine/tester.py /root/ssy/maskrcnn-benchmark/maskrcnn_benchmark/engine
-cd /root/ssy/maskrcnn-benchmark/
+#cp /root/ssy/training/object_detection/pytorch/maskrcnn_benchmark/utils/mlperf_logger.py /root/ssy/maskrcnn-benchmark/maskrcnn_benchmark/utils/
+#cp /root/ssy/training/object_detection/pytorch/maskrcnn_benchmark/engine/tester.py /root/ssy/maskrcnn-benchmark/maskrcnn_benchmark/engine
+cd /root/ssy/ssynew/maskrcnn-benchmark/
 python setup.py build develop  
 
+python -m pip install cityscapesscripts
+
+
 # real run
-cd /root/ssy/training/object_detection/pytorch/
+cd /root/ssy/training/object_detection_BF16/pytorch/
 # to avoid linspace use float64 as int
 cp bak/cocoeval.py "/opt/conda/envs/maskrcnn_benchmark/lib/python3.7/site-packages/pycocotools/cocoeval.py"
-CUDA_VISIBLE_DEVICES=0 ./run_and_time.sh |tee l1
+CUDA_VISIBLE_DEVICES=2 ./run_and_time.sh |tee bf16_1.log
 
-
+##########################################
+## dont use below
+##########################################
 
 
 #apt upgrade libstdc++6 -o Acquire::https::developer.download.nvidia.com::Verify-Peer=false --fix-missing

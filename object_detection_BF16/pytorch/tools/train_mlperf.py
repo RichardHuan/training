@@ -45,11 +45,9 @@ def test_and_exchange_map(tester, model, distributed):
         map_results, raw_results = results[0]
         bbox_map = map_results.results["bbox"]['AP']
         segm_map = map_results.results["segm"]['AP']
-        print("ssy11")
     else:
         bbox_map = 0.
         segm_map = 0.
-        print("ssy12")
 
     if distributed:
         map_tensor = torch.tensor([bbox_map, segm_map], dtype=torch.float32, device=torch.device("cuda"))
@@ -63,31 +61,22 @@ def mlperf_test_early_exit(iteration, iters_per_epoch, tester, model, distribute
     # Note: let iters / epoch == 10k, at iter 9999 we've finished epoch 0 and need to test
     if iteration > 0 and (iteration + 1)% iters_per_epoch == 0:
         epoch = iteration // iters_per_epoch
-        print("ssy1")
 
         print_mlperf(key=mlperf_log.EVAL_START, value=epoch)
-        print("ssy2")
         #print("tester "+str(tester))
         #print("model "+str(model))
 
         bbox_map, segm_map = test_and_exchange_map(tester, model, distributed)
-        print("ssy3")
         # necessary for correctness
         model.train()
-        print("ssy4")
 
         print_mlperf(key=mlperf_log.EVAL_TARGET, value={"BBOX": min_bbox_map,
                                                         "SEGM": min_segm_map})
-        print("ssy5")
         logger = logging.getLogger('maskrcnn_benchmark.trainer')
-        print("ssy6")
         logger.info('bbox mAP: {}, segm mAP: {}'.format(bbox_map, segm_map))
-        print("ssy7")
 
         print_mlperf(key=mlperf_log.EVAL_ACCURACY, value={"epoch" : epoch, "value":{"BBOX" : bbox_map, "SEGM" : segm_map}})
-        print("ssy8")
         print_mlperf(key=mlperf_log.EVAL_STOP)
-        print("ssy9")
 
         # terminating condition
         if bbox_map >= min_bbox_map and segm_map >= min_segm_map:
@@ -140,7 +129,7 @@ def train(cfg, local_rank, distributed):
     print_mlperf(key=mlperf_log.ASPECT_RATIOS, value=cfg.MODEL.RPN.ASPECT_RATIOS)
     print_mlperf(key=mlperf_log.BACKBONE, value=cfg.MODEL.BACKBONE.CONV_BODY)
     print_mlperf(key=mlperf_log.NMS_THRESHOLD, value=cfg.MODEL.RPN.NMS_THRESH)
-    # /root/ssy/maskrcnn-benchmark/maskrcnn_benchmark/modeling/detector/detectors.py
+    # /root/ssy/ssynew/maskrcnn-benchmark/maskrcnn_benchmark/modeling/detector/detectors.py
     # building bare mode without doing anthing
     model = build_detection_model(cfg)
     device = torch.device(cfg.MODEL.DEVICE)
@@ -167,6 +156,7 @@ def train(cfg, local_rank, distributed):
     arguments["iteration"] = 0
 
     output_dir = cfg.OUTPUT_DIR
+    print("output_dir "+str(output_dir))
 
     save_to_disk = get_rank() == 0
     checkpointer = DetectronCheckpointer(
@@ -211,7 +201,7 @@ def train(cfg, local_rank, distributed):
     per_iter_callback_fn = functools.partial(
             mlperf_test_early_exit,
             iters_per_epoch=iters_per_epoch,
-            # /root/ssy/maskrcnn-benchmark/maskrcnn_benchmark/engine/tester.py
+            # /root/ssy/ssynew/maskrcnn-benchmark/maskrcnn_benchmark/engine/tester.py
             tester=functools.partial(test, cfg=cfg),
             model=model,
             distributed=distributed,
@@ -219,7 +209,7 @@ def train(cfg, local_rank, distributed):
             min_segm_map=0.339)
 
     start_train_time = time.time()
-    # /root/ssy/maskrcnn-benchmark/maskrcnn_benchmark/engine/trainer.py
+    # /root/ssy/ssynew/maskrcnn-benchmark/maskrcnn_benchmark/engine/trainer.py
     do_train(
         model,
         data_loader,
