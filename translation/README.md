@@ -2,7 +2,9 @@
 
 ## download data
 # the old link is invalid, I need to modify it and the verify script can not be used anymore
-source download_data.sh
+#source download_data.sh
+# get it from here
+git clone training/translation/README.md
 # and then move them to ~/ssy/dataset/bert
 
 ## docker
