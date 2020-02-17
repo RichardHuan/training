@@ -11,16 +11,18 @@ git clone training/translation/README.md
 
 docker build . -t mlperf-nvidia:bert
 
-nvidia-docker run -it --ipc=host -v /root/ssy/training/translation/tensorflow/transformer:/research/transformer -v /root/ssy/dataset/bert/raw_data:/raw_data --name ssyBERT mlperf-nvidia:bert
-nvidia-docker start ssyBERT
-nvidia-docker exec -it ssyBERT /bin/bash
+#nvidia-docker run -it --ipc=host -v /root/ssy:/root/ssy/ --name ssyBERT mlperf-nvidia:bert
+#nvidia-docker start ssyBERT
+#nvidia-docker exec -it ssyBERT /bin/bash
+nvidia-docker exec -it ssyMNISTTF /bin/bash
+
 
 ## preprocess data
 # source run_preprocessing.sh
 # this will be run by following real run
 
 ## real run
-CUDA_VISIBLE_DEVICES=0 source ./run_and_time.sh  1|tee l1_fp32_v100
+CUDA_VISIBLE_DEVICES=3 source ./run_and_time.sh  1|tee fp32_1.log
 
 
 # 1. Problem 

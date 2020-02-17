@@ -10,6 +10,9 @@ TARGET_UNCASED_BLEU_SCORE=25
 
 set -e
 
+# Run benchmark (training)
+SEED=${1:-1}
+
 export COMPLIANCE_FILE="/tmp/transformer_compliance_${SEED}.log"
 # path to the mlpef_compliance package in local directory,
 # if not set then default to the package name for installing from PyPI.
@@ -28,8 +31,6 @@ START=$(date +%s)
 START_FMT=$(date +%Y-%m-%d\ %r)
 echo "STARTING TIMING RUN AT ${START_FMT}"
 
-# Run benchmark (training)
-SEED=${1:-1}
 
 echo "Running benchmark with seed ${SEED}"
 . run_training.sh ${SEED} ${TARGET_UNCASED_BLEU_SCORE}
