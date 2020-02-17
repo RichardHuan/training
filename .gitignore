@@ -9,4 +9,6 @@ model.ckpt-*
 *.nvvp
 *.log
 *.csv
-
+LICENSE
+.dockerignorea
+.gitignore
