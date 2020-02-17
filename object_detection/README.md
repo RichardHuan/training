@@ -3,9 +3,9 @@
 ## build docker Dockerfile
 nvidia-docker build . -t mlperf/object_detection
 
-nvidia-docker run -it --ipc=host -v /root/ssy:/root/ssy --name ssyFRCNN mlperf/object_detection
-nvidia-docker start ssyFRCNN
-nvidia-docker exec -it ssyFRCNN /bin/bash
+nvidia-docker run -it --ipc=host -v /root/ssy:/root/ssy --name ssyFRCNN2 mlperf/object_detection
+nvidia-docker start ssyFRCNN2
+nvidia-docker exec -it ssyFRCNN2 /bin/bash
 
 # build coco api
 cd /root/ssy/

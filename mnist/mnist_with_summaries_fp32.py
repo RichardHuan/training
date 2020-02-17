@@ -93,6 +93,7 @@ def train():
         biases = bias_variable([output_dim])
         variable_summaries(biases)
       with tf.name_scope('Wx_plus_b'):
+        # SSY /usr/local/lib/python3.5/dist-packages/tensorflow/python/ops/math_ops.py
         preactivate = tf.matmul(input_tensor, weights) + biases
         tf.summary.histogram('pre_activations', preactivate)
       activations = act(preactivate, name='activation')

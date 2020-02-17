@@ -7,10 +7,15 @@ You can download and verify the dataset by running the `download_dataset.sh` and
 docker pull mlperf/recommendation:v0.5
 
 ## start docker
-sudo nvidia-docker run -i -t  --ipc=host  --entrypoint "bash"   --mount "type=bind,source=$(pwd),destination=/mlperf/experiment"  --name ssyNCF   mlperf/recommendation:v0.5 
-sudo nvidia-docker start ssyNCF
+#sudo nvidia-docker run -i -t  --ipc=host  --entrypoint "bash"   --mount "type=bind,source=$(pwd),destination=/mlperf/experiment"  --name ssyNCF   mlperf/recommendation:v0.5 
+nvidia-docker run -i -t  --ipc=host  --entrypoint "bash"  -v /root/ssy:/root/ssy  --name ssyNCF   mlperf/recommendation:v0.5 
+nvidia-docker start ssyNCF
 nvidia-docker exec -it ssyNCF /bin/bash
 
+cd /root/ssy/training/recommendation/pytorch/
+source /root/ssy/training/env.sh
+apt-get update -o Acquire::https::developer.download.nvidia.com::Verify-Peer=false
+apt install -y vim
 
 # this is the real running script
 CUDA_VISIBLE_DEVICES=0 run_and_time.sh 3|tee lxx
