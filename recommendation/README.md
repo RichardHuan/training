@@ -17,6 +17,12 @@ source /root/ssy/training/env.sh
 apt-get update -o Acquire::https::developer.download.nvidia.com::Verify-Peer=false
 apt install -y vim
 
+# installing compliantce
+cd /root/ssy/training/compliance/
+python3 setup.py install
+cd /root/ssy/training/recommendation/pytorch/
+
+
 # this is the real running script
 CUDA_VISIBLE_DEVICES=0 run_and_time.sh 3|tee lxx
 
