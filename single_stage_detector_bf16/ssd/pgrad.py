@@ -24,7 +24,7 @@ from torch.nn import Module
 def float2bf16(xmlp):
         aabs=torch.abs(xmlp)
         rnd2exp=torch.pow(2,torch.floor(torch.where(aabs==0.0,aabs,torch.log2(aabs)))) # get back the old value rounded to 2 exp
-        return  torch.mul(torch.mul(torch.div(torch.floor(torch.mul(torch.div(aabs,rnd2exp),4)),4),rnd2exp),torch.sign(xmlp))
+        return  torch.mul(torch.mul(torch.div(torch.floor(torch.mul(torch.div(aabs,rnd2exp),256)),256),rnd2exp),torch.sign(xmlp))
 
 class bf16cutfp(Function):
     @staticmethod

@@ -7,4 +7,6 @@ model.ckpt-*
 *.swp
 *.so
 *.nvvp
+*.log
+*.csv
 

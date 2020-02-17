@@ -44,8 +44,12 @@ class SSD300(nn.Module):
         self.conf = []
 
         for nd, oc in zip(self.num_defaults, self.out_chan):
+            #self.loc.append(bf16cutfp_mod())
             self.loc.append(nn.Conv2d(oc, nd*4, kernel_size=3, padding=1))
+            #self.loc.append(bf16cutbp_mod())
+            #self.conf.append(bf16cutfp_mod())
             self.conf.append(nn.Conv2d(oc, nd*label_num, kernel_size=3, padding=1))
+            #self.conf.append(bf16cutbp_mod())
 
 
         self.loc = nn.ModuleList(self.loc)
