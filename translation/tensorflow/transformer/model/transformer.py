@@ -59,10 +59,12 @@ class Transformer(object):
     """
     self.train = train
     self.params = params
-
+    # SSY 1  transformer/model/embedding_layer.py
     self.embedding_softmax_layer = embedding_layer.EmbeddingSharedWeights(
         params.vocab_size, params.hidden_size)
+    # SSY 2 see below only matmul
     self.encoder_stack = EncoderStack(params, train)
+    # SSY 3  see below
     self.decoder_stack = DecoderStack(params, train)
 
   def __call__(self, inputs, targets=None):
@@ -329,8 +331,10 @@ class EncoderStack(tf.layers.Layer):
         value=params.num_hidden_layers)
     for _ in range(params.num_hidden_layers):
       # Create sublayers for each layer.
+      # SSY 2.1  transformer/model/attention_layer.py Dense and matmul
       self_attention_layer = attention_layer.SelfAttention(
           params.hidden_size, params.num_heads, params.attention_dropout, train)
+      # SSY 2.2 transformer/model/ffn_layer.py only Dense
       feed_forward_network = ffn_layer.FeedFowardNetwork(
           params.hidden_size, params.filter_size, params.relu_dropout, train)
 
@@ -374,10 +378,13 @@ class DecoderStack(tf.layers.Layer):
         key=mlperf_log.MODEL_HP_NUM_HIDDEN_LAYERS,
         value=params.num_hidden_layers)
     for _ in range(params.num_hidden_layers):
+      # SSY 3.1  transformer/model/attention_layer.py Dense and matmul
       self_attention_layer = attention_layer.SelfAttention(
           params.hidden_size, params.num_heads, params.attention_dropout, train)
+      # SSY 3.2  transformer/model/attention_layer.py Dense and matmul
       enc_dec_attention_layer = attention_layer.Attention(
           params.hidden_size, params.num_heads, params.attention_dropout, train)
+      # SSY 3.3 transformer/model/ffn_layer.py only Dense
       feed_forward_network = ffn_layer.FeedFowardNetwork(
           params.hidden_size, params.filter_size, params.relu_dropout, train)
 

@@ -52,6 +52,7 @@ def model_fn(features, labels, mode, params):
     inputs, targets = features, labels
 
     # Create model and get output logits.
+    # SSY ./transformer/model/transformer.py
     model = transformer.Transformer(params, mode == tf.estimator.ModeKeys.TRAIN)
 
     output = model(inputs, targets)

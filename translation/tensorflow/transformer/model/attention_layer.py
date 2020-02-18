@@ -39,6 +39,7 @@ class Attention(tf.layers.Layer):
 
     # Layers for linearly projecting the queries, keys, and values.
     use_bias = False
+    # SSY /usr/local/lib/python3.5/dist-packages/tensorflow_core/python/keras/layers/core.py
     self.q_dense_layer = tf.layers.Dense(hidden_size, use_bias=use_bias, name="q")
     self.k_dense_layer = tf.layers.Dense(hidden_size, use_bias=use_bias, name="k")
     self.v_dense_layer = tf.layers.Dense(hidden_size, use_bias=use_bias, name="v")
@@ -136,6 +137,7 @@ class Attention(tf.layers.Layer):
     q *= depth ** -0.5
 
     # Calculate dot product attention
+    # SSY bf16
     logits = tf.matmul(q, k, transpose_b=True)
     logits += bias
     weights = tf.nn.softmax(logits, name="attention_weights")
@@ -144,6 +146,7 @@ class Attention(tf.layers.Layer):
           key=mlperf_log.MODEL_HP_ATTENTION_DROPOUT,
           value=self.attention_dropout)
       weights = tf.nn.dropout(weights, 1.0 - self.attention_dropout)
+    # SSY bf16
     attention_output = tf.matmul(weights, v)
 
     # Recombine heads --> [batch_size, length, hidden_size]
@@ -153,7 +156,7 @@ class Attention(tf.layers.Layer):
     attention_output = self.output_dense_layer(attention_output)
     return attention_output
 
-
+# SSY see above
 class SelfAttention(Attention):
   """Multiheaded self-attention layer."""
 

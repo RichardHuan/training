@@ -9,7 +9,8 @@ nvidia-docker run -it  --ipc=host  --entrypoint "bash"   -v /root/ssy:/root/ssy 
 docker pull tensorflow/tensorflow:1.12.0-devel-gpu-py3
 nvidia-docker run -it  --ipc=host  --entrypoint "bash"   -v /root/ssy:/root/ssy  --name ssyMNISTTF3    tensorflow/tensorflow:1.12.0-devel-gpu-py3
 
-
+# buld docker bert
+docker build . -t tfbase
 
 
 

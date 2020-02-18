@@ -3,3 +3,12 @@ Current AP: 0.08943 AP goal: 0.21200
 Current AP: 0.11271 AP goal: 0.21200
 Current AP: 0.13123 AP goal: 0.21200
 Current AP: 0.14618 AP goal: 0.21200
+Current AP: 0.15307 AP goal: 0.21200
+Current AP: 0.15681 AP goal: 0.21200
+Current AP: 0.16068 AP goal: 0.21200
+Current AP: 0.16641 AP goal: 0.21200
+Current AP: 0.17561 AP goal: 0.21200
+Current AP: 0.17936 AP goal: 0.21200
+Current AP: 0.18338 AP goal: 0.21200
+Current AP: 0.18437 AP goal: 0.21200
+Current AP: 0.18606 AP goal: 0.21200

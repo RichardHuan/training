@@ -8,10 +8,12 @@ git clone training/translation/README.md
 # and then move them to ~/ssy/dataset/bert
 
 ## docker
-
-docker build . -t mlperf-nvidia:bert
-
+# this version can only reach bleu score 21
+#docker build . -t mlperf-nvidia:bert
 #nvidia-docker run -it --ipc=host -v /root/ssy:/root/ssy/ --name ssyBERT mlperf-nvidia:bert
+
+# I chose to rebuild my own version
+nvidia-docker run -it  --ipc=host  --entrypoint "bash"   -v /root/ssy:/root/ssy  --name ssyBERT   nvidia/cuda:10.0-cudnn7-devel-ubuntu16.04
 #nvidia-docker start ssyBERT
 #nvidia-docker exec -it ssyBERT /bin/bash
 nvidia-docker exec -it ssyMNISTTF /bin/bash
