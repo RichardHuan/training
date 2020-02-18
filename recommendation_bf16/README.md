@@ -33,6 +33,14 @@ source cp.sh
 # this is the real running script
 CUDA_VISIBLE_DEVICES=3 run_and_time.sh 3|tee lxx
 
+
+
+
+
+
+
+
+
 # to insert my bf16
 # and then try run this
 # only for trying fastly

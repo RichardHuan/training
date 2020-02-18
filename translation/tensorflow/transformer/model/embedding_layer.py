@@ -25,6 +25,12 @@ from mlperf_compliance import mlperf_log
 from model import model_utils
 
 
+# SSY
+from .bf16cut_fp_op    import *
+from .bf16cut_fp_grad_op    import *
+from .bf16cut_bp_op    import *
+from .bf16cut_bp_grad_op    import *
+
 class EmbeddingSharedWeights(tf.layers.Layer):
   """Calculates input embeddings and pre-softmax linear with shared weights."""
 
@@ -88,7 +94,11 @@ class EmbeddingSharedWeights(tf.layers.Layer):
 
       x = tf.reshape(x, [-1, self.hidden_size])
       # SSY bf16
-      
-      logits = tf.matmul(x, self.shared_weights, transpose_b=True)
+      x = tf.reshape(bf16cut_fp(x),tf.shape(x))
+      wgt = tf.reshape(bf16cut_fp(self.shared_weights),tf.shape(self.shared_weights))
+      #logits = tf.matmul(x, self.shared_weights, transpose_b=True)
+      logits = tf.matmul(x, wgt, transpose_b=True)
+      logits = tf.reshape(bf16cut_bp(logits),tf.shape(logits))
+     
 
       return tf.reshape(logits, [batch_size, length, self.vocab_size])

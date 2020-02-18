@@ -1,0 +1,3 @@
+cp pgrad.py  /opt/conda/lib/python3.6/site-packages/torch/nn/modules/
+cp conv.py   /opt/conda/lib/python3.6/site-packages/torch/nn/modules/
+cp linear.py /opt/conda/lib/python3.6/site-packages/torch/nn/modules/
