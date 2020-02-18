@@ -2,8 +2,9 @@
 # INSTALL 
 
 # buld docker tfbase
+cd /root/ssy/training/tfbase_docker/
 docker build . -t tfbase
-nvidia-docker run -it  --ipc=host  --entrypoint "bash"   -v /root/ssy:/root/ssy  --name ssyMNISTTF   nvidia/cuda:10.0-cudnn7-devel-ubuntu16.04
+nvidia-docker run -it  --ipc=host  --entrypoint "bash"   -v /root/ssy:/root/ssy  --name ssyMNISTTF   tfbase
 
 # START
 ## on host
