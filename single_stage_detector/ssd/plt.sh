@@ -1,15 +1,31 @@
-grep "^Current AP" l1_fp32_v100.log                                                   > a1_fp32_v100.p
-grep "^Current AP" ../../single_stage_detector_bf16/ssd/l2_bf16_v100.log              > a2_bf16_v100.p
-grep "^Current AP" ../../single_stage_detector_bf12/ssd/l3_bf12_v100.log              > a3_bf12_v100.p
-grep "^Current AP" ../../single_stage_detector_bf16/ssd/l4_bf16_fpbpMOD_v100.log      > a4_bf16_fpbpMOD_v100.p
-grep "^Current AP" ../../single_stage_detector_bf12/ssd/l5_bf12_fpbpMod_v100.log      > a5_bf12_fpbpMod_v100.p
-grep "^Current AP" ../../single_stage_detector_bf16/ssd/l11_bf10_v100.log             > a11_bf10_v100.p
-grep "^Current AP" ../../single_stage_detector_bf12/ssd/l13_bf9_v100.log              > a13_bf9_v100.p
-grep "^Current AP" ../../single_stage_detector_native_bf16//ssd/bf16_native_1.log > bf16_native_1.p
-grep "^Current AP" ../../single_stage_detector_native_bf16//ssd/bf12_native_1.log > bf12_native_1.p
+cat l1_fp32_v100.log                                               |sed 's+\r+\n+g' | awk '{if($1=="Iteration:") {ite=substr($2,1,length($2)-1)} else if($0 ~ /Current AP/) {print ite " " $3 " " $6}}'> a1_fp32_v100.p
+cat ../../single_stage_detector_native_bf16//ssd/bf16_native_1.log |sed 's+\r+\n+g' | awk '{if($1=="Iteration:") {ite=substr($2,1,length($2)-1)} else if($0 ~ /Current AP/) {print ite " " $3 " " $6}}'> bf16_native_1.p
+cat ../../single_stage_detector_native_bf16//ssd/bf12_native_1.log |sed 's+\r+\n+g' | awk '{if($1=="Iteration:") {ite=substr($2,1,length($2)-1)} else if($0 ~ /Current AP/) {print ite " " $3 " " $6}}'> bf12_native_1.p
 
-#gnuplot -p -e 'set key bottom right;set xlabel "Iteration*10000";set ylabel "Accuracy";plot "a1" u 0:3 w linesp, "a1_fp32_v100" u 0:3 w linesp, "a2_bf16_v100" u 0:3 w linesp, "a3_bf12_v100" u 0:3 w linesp , "a3_bf12_v100" u 0:6 w linesp title "target", "a4_bf16_fpbpMOD_v100" u 0:3 w linesp, "a5_bf12_fpbpMod_v100" u 0:3 w linesp, "a11_bf10_v100" u 0:3 w linesp , "a13_bf9_v100" u 0:3 w linesp'
-#gnuplot -p -e 'set key bottom right;set xlabel "Iteration*10000";set ylabel "Accuracy";plot "a1_fp32_v100.p" u 0:3 w linesp, "a1_fp32_v100.p" u 0:6 w linesp title "target", "a4_bf16_fpbpMOD_v100.p" u 0:3 w linesp, "a5_bf12_fpbpMod_v100.p" u 0:3 w linesp title "4 bit mantissa", "a11_bf10_v100.p" u 0:3 w linesp title "2 bit mantissa", "a13_bf9_v100.p" u 0:3 w linesp title "1 bit mantissa" , "bf16_native_1.p" u 0:3 w linesp title "native bf16 on both feature, weight and gradient"'
-gnuplot -p -e 'set key bottom right;set xlabel "Iteration*10000";set ylabel "Accuracy";plot "a1_fp32_v100.p" u 0:3 w linesp, "a1_fp32_v100.p" u 0:6 w linesp title "target",  "bf16_native_1.p" u 0:3 w linesp title "native bf16 on both feature, weight and gradient" , "bf12_native_1.p" u 0:3 w linesp title "native bf12 with 4 bit mantissa on both feature, weight and gradient"'
+cat l1_fp32_v100.log                                               |sed 's+\r+\n+g' | awk '{if($1=="Iteration:") {print substr($2,1,length($2)-1) " " substr($5,1,length($5)-1) " " $NF}}' | awk '{if($1%1000==0){print}}'> a1_fp32_v100.loss
+cat ../../single_stage_detector_native_bf16//ssd/bf16_native_1.log |sed 's+\r+\n+g' | awk '{if($1=="Iteration:") {print substr($2,1,length($2)-1) " " substr($5,1,length($5)-1) " " $NF}}' | awk '{if($1%1000==0){print}}'> bf16_native_1.loss
+cat ../../single_stage_detector_native_bf16//ssd/bf12_native_1.log |sed 's+\r+\n+g' | awk '{if($1=="Iteration:") {print substr($2,1,length($2)-1) " " substr($5,1,length($5)-1) " " $NF}}' | awk '{if($1%1000==0){print}}'> bf12_native_1.loss
 
+
+gnuplot -p -e '
+  set key left top;
+  set xlabel "Iteration";
+  set y2label "Accuracy";
+  set ylabel "Loss";
+  set ytics nomirror; 
+  set yrange  [2.5:10];
+  set y2tics 0,0.01,0.25;
+  plot 
+   0.212 axis x1y2 title "target",
+   "a1_fp32_v100.p"     u 1:2 w linesp axis x1y2 title "fp32",
+   "bf16_native_1.p"    u 1:2 w linesp axis x1y2 title "bf16 on 3 directions" ,
+   "bf12_native_1.p"    u 1:2 w linesp axis x1y2 title "bf12 4 bit mantissa",
+   "a1_fp32_v100.loss"  u 1:2          axis x1y1 title "fp32 loss",
+   "bf16_native_1.loss" u 1:2          axis x1y1 title "bf16 loss",
+   "bf12_native_1.loss" u 1:2          axis x1y1 title "bf12 loss"
+'
+
+#   "a1_fp32_v100.loss"  u 1:3 w linesp axis x1y1 title "fp32 loss avg",
+#   "bf16_native_1.loss" u 1:3 w linesp axis x1y1 title "bf16 loss avg",
+#   "bf12_native_1.loss" u 1:3 w linesp axis x1y1 title "bf12 loss avg"
 
