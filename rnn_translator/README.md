@@ -1,13 +1,44 @@
+# SSY
+
+## downlaod data
+source download_dataset.sh
+source verify_dataset.sh
+
+
+## build docker
+docker build .  -t gnmt:latest
+
+nvidia-docker run -it  --ipc=host -v /root/ssy/dataset/rnn_translator/data:/data -v /root/ssy/training/rnn_translator/pytorch:/workspace/pytorch --name ssyRNN gnmt:latest
+nvidia-docker start ssyRNN
+nvidia-docker exec -it ssyRNN /bin/bash
+
+CUDA_VISIBLE_DEVICES=2 ./run_and_time.sh 1 |tee l1_fp32_v100
+
+
+## VERY IMPORTANT
+GNMT use LSTM from pytorch's install, I need to save /opt/conda/lib/python3.6/site-packages/torch/nn/modules/rnn.py
+q
+
+# 
+
 # 1. Problem
 
 This problem uses recurrent neural network to do language translation.
 
+## Requirements
+* [Python 3.6](https://www.python.org)
+* [CUDA 9.0](https://developer.nvidia.com/cuda-90-download-archive)
+* [PyTorch 0.4.0](https://pytorch.org)
+* [sacrebleu](https://pypi.org/project/sacrebleu/)
+
 ### Recommended setup
 * [nvidia-docker](https://github.com/NVIDIA/nvidia-docker)
+* [pytorch/pytorch:0.4_cuda9_cudnn7 container](https://hub.docker.com/r/pytorch/pytorch/tags/)
 
 # 2. Directions
 ### Steps to configure machine
 
+Common steps for all rnn-translation tests
 To setup the environment on Ubuntu 16.04 (16 CPUs, one P100, 100 GB disk), you can use these commands. This may vary on a different operating system or graphics card.
 
 
@@ -62,6 +93,20 @@ Download the data using the following command:
 Verify data with:
 
     bash verify_dataset.sh
+
+### Steps specific to the pytorch version to run and time
+
+    sudo docker build . --rm -t gnmt:latest
+    SEED=1
+    NOW=`date "+%F-%T"`
+    sudo nvidia-docker run -it --rm --ipc=host \
+      -v $(pwd)/../data:/data \
+      gnmt:latest "./run_and_time.sh" $SEED |tee benchmark-$NOW.log
+
+### one can control which GPUs are used with the NV_GPU variable
+    sudo NV_GPU=0 nvidia-docker run -it --rm --ipc=host \ 
+      -v $(pwd)/../data:/data \ 
+      gnmt:latest "./run_and_time.sh" $SEED |tee benchmark-$NOW.log
 
 # 3. Dataset/Environment
 ### Publication/Attribution
