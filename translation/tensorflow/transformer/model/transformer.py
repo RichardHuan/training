@@ -62,7 +62,7 @@ class Transformer(object):
     # SSY 1  transformer/model/embedding_layer.py
     self.embedding_softmax_layer = embedding_layer.EmbeddingSharedWeights(
         params.vocab_size, params.hidden_size)
-    # SSY 2 see below only matmul
+    # SSY 2 see below only matmul and Dense
     self.encoder_stack = EncoderStack(params, train)
     # SSY 3  see below
     self.decoder_stack = DecoderStack(params, train)

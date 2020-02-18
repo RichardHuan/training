@@ -50,6 +50,11 @@ from tensorflow.python.util import nest
 from tensorflow.python.util import tf_inspect
 from tensorflow.python.util.tf_export import keras_export
 
+# SSY
+from .bf16cut_fp_op    import *
+from .bf16cut_fp_grad_op    import *
+from .bf16cut_bp_op    import *
+from .bf16cut_bp_grad_op    import *
 
 @keras_export('keras.layers.Masking')
 class Masking(Layer):
@@ -1038,7 +1043,12 @@ class Dense(Layer):
     rank = len(inputs.shape)
     if rank > 2:
       # Broadcasting is required for the inputs.
-      outputs = standard_ops.tensordot(inputs, self.kernel, [[rank - 1], [0]])
+      # SSY bf16
+      inp = tf.reshape(bf16cut_fp(inputs),tf.shape(inputs))
+      k = tf.reshape(bf16cut_fp(self.kernel),tf.shape(self.kernel))
+      #outputs = standard_ops.tensordot(inputs, self.kernel, [[rank - 1], [0]])
+      outputs  = standard_ops.tensordot(inp   , k,           [[rank - 1], [0]])
+      outputs  = tf.reshape(bf16cut_bp(outputs),tf.shape(outputs))
       # Reshape the output back to the original ndim of the input.
       if not context.executing_eagerly():
         shape = inputs.shape.as_list()
@@ -1047,9 +1057,19 @@ class Dense(Layer):
     else:
       inputs = math_ops.cast(inputs, self._compute_dtype)
       if K.is_sparse(inputs):
-        outputs = sparse_ops.sparse_tensor_dense_matmul(inputs, self.kernel)
+        # SSY bf16
+        inp = tf.reshape(bf16cut_fp(inputs),tf.shape(inputs))
+        k = tf.reshape(bf16cut_fp(self.kernel),tf.shape(self.kernel))
+        #outputs = sparse_ops.sparse_tensor_dense_matmul(inputs, self.kernel)
+        outputs = sparse_ops.sparse_tensor_dense_matmul(inp, k)
+        outputs  = tf.reshape(bf16cut_bp(outputs),tf.shape(outputs))
       else:
-        outputs = gen_math_ops.mat_mul(inputs, self.kernel)
+        # SSY bf16
+        inp = tf.reshape(bf16cut_fp(inputs),tf.shape(inputs))
+        k = tf.reshape(bf16cut_fp(self.kernel),tf.shape(self.kernel))
+        #outputs = gen_math_ops.mat_mul(inputs, self.kernel)
+        outputs = gen_math_ops.mat_mul(inp, k)
+        outputs  = tf.reshape(bf16cut_bp(outputs),tf.shape(outputs))
     if self.use_bias:
       outputs = nn.bias_add(outputs, self.bias)
     if self.activation is not None:
