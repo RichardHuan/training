@@ -39,13 +39,13 @@ bazel build --config=opt --distdir=dstdir //tensorflow/tools/pip_package:build_p
 
 
 # build pip packet
-cd cd /root/ssy/tensorflow_1.15.2/tensorflow/
+cd /root/ssy/tensorflow_1.15.2/tensorflow/
 ./bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
 
 # install
 pip install /tmp/tensorflow_pkg/tensorflow-1.15.2-cp35-cp35m-linux_x86_64.whl
-
-
+# or if other people have build it
+pip install tensorflow-1.15.2-cp35-cp35m-linux_x86_64.whl
 
 ## download and process data
 
@@ -55,8 +55,11 @@ https://github.com/tensorflow/models/blob/master/research/inception/inception/da
 the last is the script to convert imagenet
 and its data dir is all related scripts to be downloaded to my local data dir 
 
-in docker
-source download_and_preprocess_imagenet /imn
+#in docker
+cd /root/ssy/training/compliance/
+python3 setup.py  install
+
+cd /root/ssy/training/image_classification/tensorflow/
 CUDA_VISIBLE_DEVICES=7 ./run_and_time.sh 1 |tee l1
 
 

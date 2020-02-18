@@ -50,13 +50,20 @@ source ~/ssy/script/gitscr/disableVerify.sh
 bazel build --config=opt --distdir=dstdir //tensorflow/tools/pip_package:build_pip_package
 
 # build pip packet
+cd /root/ssy/tensorflow_1.15.2/tensorflow/
 ./bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
 
 # install
 pip install /tmp/tensorflow_pkg/tensorflow-1.15.2-cp35-cp35m-linux_x86_64.whl
+# back it up for other system to install
+cp /tmp/tensorflow_pkg/tensorflow-1.15.2-cp35-cp35m-linux_x86_64.whl .
+
+cd /root/ssy/training/compliance/  
+python3 setup.py  install       
 
 ## run
-CUDA_VISIBLE_DEVICES=6 python3 mnist_with_summaries_bf16.py
+cd /root/ssy/training/translation/tensorflow/
+CUDA_VISIBLE_DEVICES=6  run_and_time.sh 1
 
 
 # 1. Problem 
