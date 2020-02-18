@@ -1,23 +1,9 @@
 # SSY
 # INSTALL 
-## on host
-# share with reinforcement
-docker pull  nvidia/cuda:10.0-cudnn7-devel-ubuntu16.04
-nvidia-docker run -it  --ipc=host  --entrypoint "bash"   -v /root/ssy:/root/ssy  --name ssyMNISTTF   nvidia/cuda:10.0-cudnn7-devel-ubuntu16.04
-docker pull  nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
-nvidia-docker run -it  --ipc=host  --entrypoint "bash"   -v /root/ssy:/root/ssy  --name ssyMNISTTF2   nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
-docker pull tensorflow/tensorflow:1.12.0-devel-gpu-py3
-nvidia-docker run -it  --ipc=host  --entrypoint "bash"   -v /root/ssy:/root/ssy  --name ssyMNISTTF3    tensorflow/tensorflow:1.12.0-devel-gpu-py3
 
-# buld docker bert
+# buld docker tfbase
 docker build . -t tfbase
-
-
-
-## in docker
-source /root/ssy/training/env.sh
-source /root/ssy/training/update_install.sh
-
+nvidia-docker run -it  --ipc=host  --entrypoint "bash"   -v /root/ssy:/root/ssy  --name ssyMNISTTF   nvidia/cuda:10.0-cudnn7-devel-ubuntu16.04
 
 # START
 ## on host
@@ -30,13 +16,6 @@ source /root/ssy/training/env.sh
 
 ## run
 CUDA_VISIBLE_DEVICES=6 python3 mnist_with_summaries_bf16.py
-
-# to build tensorflow v1.15.0 in docker
-# install required 
-apt install -y python3-dev python3-pip
-pip install -U --user pip six numpy wheel setuptools mock 'future>=0.17.1'
-pip install -U --user keras_applications --no-deps
-pip install -U --user keras_preprocessing --no-deps
 
 # install bazel
 # this avoid bazel too many argement problem 
