@@ -2,7 +2,7 @@
 
 set -e
 
-DATASET_DIR='/data'
+DATASET_DIR='/root/ssy/dataset/rnn_translator/data'
 RESULTS_DIR='gnmt_wmt16'
 
 SEED=${1:-"1"}

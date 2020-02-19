@@ -8,10 +8,14 @@ source verify_dataset.sh
 ## build docker
 docker build .  -t gnmt:latest
 
-nvidia-docker run -it  --ipc=host -v /root/ssy/dataset/rnn_translator/data:/data -v /root/ssy/training/rnn_translator_BF16/pytorch:/workspace/pytorch --name ssyRNN_BF16 gnmt:latest
-nvidia-docker start ssyRNN_BF16
-nvidia-docker exec -it ssyRNN_BF16 /bin/bash
+nvidia-docker run -it  --ipc=host -v /root/ssy/:/root/ssy --name ssyRNN_3DBF16 gnmt:latest
+nvidia-docker start ssyRNN_3DBF16
+nvidia-docker exec -it ssyRNN_3DBF16 /bin/bash
 
+source /root/ssy/training/env.sh
+apt update
+apt install -y vim git
+cd /root/ssy/training/rnn_translator_3DBF16/pytorch/
 CUDA_VISIBLE_DEVICES=3 ./run_and_time.sh 1 |tee l1_fp32_v100
 
 

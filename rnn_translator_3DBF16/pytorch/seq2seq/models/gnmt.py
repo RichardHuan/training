@@ -27,11 +27,13 @@ class GNMT(Seq2Seq):
         else:
             embedder = None
 
-        #SSY 1 seq2seq/models/encoder.py only nn.LSTM
+        #SSY 1 seq2seq/models/encoder.py only nn.LSTM at /opt/conda/lib/python3.6/site-packages/torch/nn/modules/rnn.py by bf16cut
         self.encoder = ResidualRecurrentEncoder(vocab_size, hidden_size,
                                                 num_layers, bias, dropout,
                                                 batch_first, embedder)
-        # SSY 2 seq2seq/models/decoder.py  nn.Linear torch.bmm  nn.LSTM
+        # SSY 2 seq2seq/models/decoder.py   torch.bmm  nn.LSTM
+        # nn.Linear /opt/conda/lib/python3.6/site-packages/torch/nn/modules/linear.py by bf16cut 
+        # torch.bmm /opt/conda/lib/python3.6/site-packages/torch/onnx/symbolic.py 
         self.decoder = ResidualRecurrentDecoder(vocab_size, hidden_size,
                                                 num_layers, bias, dropout,
                                                 batch_first, math, embedder)

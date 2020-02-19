@@ -1,8 +1,8 @@
-grep maskrcnn_benchmark.trainer l1.log|awk '{if($5=="eta:"){ if($7=="iter:") {xx=$8;yy=$10 ;zz=substr($11,2,length($11)-2)}else {xx=$10;yy=$12;zz=substr($13,2,length($13)-2)};if (xx%1000 == 0 ){print  xx " " yy " " zz}}}' > fp32_1.loss
-grep maskrcnn_benchmark.trainer l1.log|awk '{if($5=="eta:") { if($7=="iter:") {save=$8} else {save=$10} } else if ($6=="mAP:") {print save " " $7 " " $10} }' > fp32_1.map
+grep maskrcnn_benchmark.trainer l1.log                                        |awk '{if($5=="eta:"){ if($7=="iter:") {xx=$8;yy=$10 ;zz=substr($11,2,length($11)-2)}else {xx=$10;yy=$12;zz=substr($13,2,length($13)-2)};if (xx%1000 == 0 ){print  xx " " yy " " zz}}}' > fp32_1.loss
+grep maskrcnn_benchmark.trainer l1.log                                        |awk '{if($5=="eta:") { if($7=="iter:") {save=$8} else {save=$10} } else if ($6=="mAP:") {print save " " $7 " " $10} }' > fp32_1.map
 
-grep maskrcnn_benchmark.trainer ../../object_detection_BF16/pytorch/bf16_1.log|awk '{if($5=="eta:"){ if($7=="iter:") {xx=$8}else {xx=$10};if (xx%1000 == 0 ){print  xx " " $12}}}' > bf16_1.loss
-grep maskrcnn_benchmark.trainer ../../object_detection_BF16/pytorch/bf16_1.log|awk '{if($5=="eta:") {save=$10 } else if ($6=="mAP:") {print save " " $7 " " $10} }' > bf16_1.map
+grep maskrcnn_benchmark.trainer ../../object_detection_BF16/pytorch/bf16_1.log|awk '{if($5=="eta:"){ if($7=="iter:") {xx=$8;yy=$10 ;zz=substr($11,2,length($11)-2)}else {xx=$10;yy=$12;zz=substr($13,2,length($13)-2)};if (xx%1000 == 0 ){print  xx " " yy " " zz}}}' > bf16_1.loss
+grep maskrcnn_benchmark.trainer ../../object_detection_BF16/pytorch/bf16_1.log|awk '{if($5=="eta:") { if($7=="iter:") {save=$8} else {save=$10} } else if ($6=="mAP:") {print save " " $7 " " $10} }' > bf16_1.map
 
 gnuplot -p -e '
   set key left top;
