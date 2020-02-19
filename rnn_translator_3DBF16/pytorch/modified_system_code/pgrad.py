@@ -3,8 +3,8 @@ import torch.autograd
 from torch.autograd import Function
 # this file is for copying toy
 # SSY /opt/conda/lib/python3.6/site-packages/torch/nn/modulesy
-from torch.nn import Module 
-#from .module import Module
+#from torch.nn import Module 
+from .module import Module
 # SSY
 
 # SSY avoid lots of intermedia result space

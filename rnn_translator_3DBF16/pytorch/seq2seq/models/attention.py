@@ -5,6 +5,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn.parameter import Parameter
 
+#SSY
+from  .pgrad import *
 
 class BahdanauAttention(nn.Module):
     """
@@ -142,7 +144,11 @@ class BahdanauAttention(nn.Module):
         # the scores
         scores_normalized = self.dropout(scores_normalized)
         # context: (b x t_q x n)
-        context = torch.bmm(scores_normalized, keys)
+        # SSY
+        sc = bf16cutfp.apply(scores_normalized)
+        kkk = bf16cutfp.apply(keys)
+        context = torch.bmm(sc, kkk)
+        context = bf16cutbp.apply(context)
 
         if single_query:
             context = context.squeeze(1)
