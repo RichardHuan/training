@@ -23,7 +23,12 @@ import tensorflow as tf
 from mlperf_compliance import mlperf_log
 
 # SSY
-from .pgrad import *
+#from .pgrad import *
+# SSY
+from tensorflow.python.keras.layers.bf16cut_fp_op    import *
+from tensorflow.python.keras.layers.bf16cut_fp_grad_op    import *
+from tensorflow.python.keras.layers.bf16cut_bp_op    import *
+from tensorflow.python.keras.layers.bf16cut_bp_grad_op    import *
 
 class Attention(tf.layers.Layer):
   """Multi-headed attention layer."""
@@ -140,10 +145,13 @@ class Attention(tf.layers.Layer):
 
     # Calculate dot product attention
     # SSY bf16
-    q = tf.reshape(id_bf16cut_fp(q),tf.shape(q))
-    k = tf.reshape(id_bf16cut_fp(k),tf.shape(k))
+    #q = tf.reshape(id_bf16cut_fp(q),tf.shape(q))
+    #k = tf.reshape(id_bf16cut_fp(k),tf.shape(k))
+    q = tf.reshape(bf16cut_fp(q),tf.shape(q))
+    k = tf.reshape(bf16cut_fp(k),tf.shape(k))
     logits = tf.matmul(q, k, transpose_b=True)
-    logits = tf.reshape(id_bf16cut_bp(logits),tf.shape(logits))
+    #logits = tf.reshape(id_bf16cut_bp(logits),tf.shape(logits))
+    logits = tf.reshape(bf16cut_bp(logits),tf.shape(logits))
 
     logits += bias
     weights = tf.nn.softmax(logits, name="attention_weights")
@@ -153,10 +161,13 @@ class Attention(tf.layers.Layer):
           value=self.attention_dropout)
       weights = tf.nn.dropout(weights, 1.0 - self.attention_dropout)
     # SSY bf16
-    weights = tf.reshape(id_bf16cut_fp(weights),tf.shape(weights))
-    v = tf.reshape(id_bf16cut_fp(v),tf.shape(v))
+    #weights = tf.reshape(id_bf16cut_fp(weights),tf.shape(weights))
+    #v = tf.reshape(id_bf16cut_fp(v),tf.shape(v))
+    weights = tf.reshape(bf16cut_fp(weights),tf.shape(weights))
+    v = tf.reshape(bf16cut_fp(v),tf.shape(v))
     attention_output = tf.matmul(weights, v)
-    attention_output = tf.reshape(id_bf16cut_bp(attention_output),tf.shape(attention_output))
+    #attention_output = tf.reshape(id_bf16cut_bp(attention_output),tf.shape(attention_output))
+    attention_output = tf.reshape(bf16cut_bp(attention_output),tf.shape(attention_output))
 
     # Recombine heads --> [batch_size, length, hidden_size]
     attention_output = self.combine_heads(attention_output)

@@ -6,4 +6,4 @@ cp ./bf16*.py /usr/local/lib/python3.5/dist-packages/tensorflow_core/python/kera
 # over write bert code with pgrad
 cp attention_layer.py /root/ssy/training/translation/tensorflow/transformer/model/
 cp embedding_layer.py /root/ssy/training/translation/tensorflow/transformer/model/
-cp pgrad.py           /root/ssy/training/translation/tensorflow/transformer/model/
+#cp pgrad.py           /root/ssy/training/translation/tensorflow/transformer/model/

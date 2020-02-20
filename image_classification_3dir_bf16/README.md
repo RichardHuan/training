@@ -4,8 +4,8 @@
 nvidia-docker run -it  --ipc=host  --entrypoint "bash"   -v /root/ssy:/root/ssy  --name ssyIMN   tfbase
 # for bf16
 nvidia-docker run -it  --ipc=host  --entrypoint "bash"   -v /root/ssy:/root/ssy  --name ssyIMN_BF16   tfbase
-nvidia-docker start ssyIMN
-nvidia-docker exec -it ssyIMN /bin/bash
+nvidia-docker start ssyIMN_BF16
+nvidia-docker exec -it ssyIMN_BF16 /bin/bash
 
 
 #in docker

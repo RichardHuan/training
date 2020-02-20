@@ -28,6 +28,9 @@ export MLPERF_COMPLIANCE_PKG=${MLPERF_COMPLIANCE_PKG:-mlperf_compliance}
 #SSY to be fast
 ######. run_preprocessing.sh ${SEED}
 
+# removing previous model
+rm -rf ./model/*
+
 # Start timing
 START=$(date +%s)
 START_FMT=$(date +%Y-%m-%d\ %r)

@@ -260,7 +260,7 @@ def resnet_model_fn(features, labels, mode, model_class,
     EstimatorSpec parameterized according to the input params and the
     current mode.
   """
-
+  print("SSY resnet_model_fn")
   # Generate a summary node for the images
   tf.summary.image('images', features, max_outputs=6)
 
@@ -478,6 +478,7 @@ def resnet_main(seed, flags, model_function, input_function, shape=None):
 
   mlperf_log.resnet_print(key=mlperf_log.INPUT_BATCH_SIZE,
                           value=flags.batch_size)
+  print("SSY tf.estimator.Estimator")
   classifier = tf.estimator.Estimator(
       model_fn=model_function, model_dir=flags.model_dir, config=run_config,
       params={

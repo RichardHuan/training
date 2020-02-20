@@ -99,7 +99,9 @@ def conv2d_fixed_padding(inputs, filters, kernel_size, strides, data_format):
   inputs_for_logging = inputs
   if strides > 1:
     inputs = fixed_padding(inputs, kernel_size, data_format)
-
+  # SSY tf.layers.conv2d
+  # /usr/local/lib/python3.5/dist-packages/tensorflow_core/python/layers/convolutional.py
+  print("ssy 2.1")
   outputs = tf.layers.conv2d(
       inputs=inputs, filters=filters, kernel_size=kernel_size, strides=strides,
       padding=('SAME' if strides == 1 else 'VALID'), use_bias=False,
@@ -228,6 +230,7 @@ def block_layer(inputs, filters, bottleneck, block_fn, blocks, strides,
   filters_out = filters * 4 if bottleneck else filters
 
   def projection_shortcut(inputs):
+    # SSY tf.layers.conv2d
     return conv2d_fixed_padding(
         inputs=inputs, filters=filters_out, kernel_size=1, strides=strides,
         data_format=data_format)
@@ -298,13 +301,17 @@ class Model(object):
     self.bottleneck = bottleneck
     if bottleneck:
       if version == 1:
+        # SSY tf.layers.conv2d
         self.block_fn = _bottleneck_block_v1
       else:
+        # SSY not imply
         self.block_fn = _bottleneck_block_v2
     else:
       if version == 1:
+        # SSY not imply
         self.block_fn = _building_block_v1
       else:
+        # SSY not imply
         self.block_fn = _building_block_v2
 
     if dtype not in ALLOWED_TYPES:
@@ -401,7 +408,7 @@ class Model(object):
         # This provides a large performance boost on GPU. See
         # https://www.tensorflow.org/performance/performance_guide#data_formats
         inputs = tf.transpose(inputs, [0, 3, 1, 2])
-
+      # SSY see above tf.layers.conv2d
       inputs = conv2d_fixed_padding(
           inputs=inputs, filters=self.num_filters, kernel_size=self.kernel_size,
           strides=self.conv_stride, data_format=self.data_format)
@@ -427,8 +434,10 @@ class Model(object):
 
       for i, num_blocks in enumerate(self.block_sizes):
         num_filters = self.num_filters * (2**i)
+        # SSY see above tf.layers.conv2d
         inputs = block_layer(
             inputs=inputs, filters=num_filters, bottleneck=self.bottleneck,
+            # SSY see above
             block_fn=self.block_fn, blocks=num_blocks,
             strides=self.block_strides[i], training=training,
             name='block_layer{}'.format(i + 1), data_format=self.data_format)
@@ -453,6 +462,7 @@ class Model(object):
       inputs = tf.reshape(inputs, [-1, self.final_size])
       mlperf_log.resnet_print(key=mlperf_log.MODEL_HP_DENSE,
                               value=self.num_classes)
+      # SSY tf.layers.dense
       inputs = tf.layers.dense(
         inputs=inputs,
         units=self.num_classes,

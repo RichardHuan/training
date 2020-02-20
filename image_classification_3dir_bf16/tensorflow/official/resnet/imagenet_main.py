@@ -192,6 +192,7 @@ def get_synth_input_fn():
 ###############################################################################
 # Running the model
 ###############################################################################
+# SSY official/resnet/resnet_model.py
 class ImagenetModel(resnet_model.Model):
   """Model class with appropriate defaults for Imagenet data."""
 
@@ -218,7 +219,7 @@ class ImagenetModel(resnet_model.Model):
     else:
       bottleneck = True
       final_size = 2048
-
+    print("SSY ImagenetModel")
     super(ImagenetModel, self).__init__(
         resnet_size=resnet_size,
         bottleneck=bottleneck,
@@ -278,6 +279,7 @@ def imagenet_model_fn(features, labels, mode, params):
 
   # Warmup and higher lr may not be valid for fine tuning with small batches
   # and smaller numbers of training images.
+  print("SSY imagenet_model_fn")
   if params['fine_tune']:
     base_lr = .1
   else:
@@ -288,11 +290,13 @@ def imagenet_model_fn(features, labels, mode, params):
       num_images=_NUM_IMAGES['train'], boundary_epochs=[30, 60, 80, 90],
       decay_rates=[1, 0.1, 0.01, 0.001, 1e-4], base_lr=_BASE_LR,
       enable_lars=params['enable_lars'])
-
+  # SSY official/resnet/resnet_run_loop.py not related
+  print("SSY creating class")
   return resnet_run_loop.resnet_model_fn(
       features=features,
       labels=labels,
       mode=mode,
+      # SSY see above
       model_class=ImagenetModel,
       resnet_size=params['resnet_size'],
       weight_decay=params['weight_decay'],
@@ -332,7 +336,7 @@ def main(argv):
   mlperf_log.resnet_print(key=mlperf_log.PREPROC_NUM_EVAL_EXAMPLES,
                           value=_NUM_IMAGES['validation'])
   input_function = flags.use_synthetic_data and get_synth_input_fn() or input_fn
-
+  print("SSY resnet_run_loop.resnet_main")
   resnet_run_loop.resnet_main(seed,
       flags, imagenet_model_fn, input_function,
       shape=[_DEFAULT_IMAGE_SIZE, _DEFAULT_IMAGE_SIZE, _NUM_CHANNELS])
