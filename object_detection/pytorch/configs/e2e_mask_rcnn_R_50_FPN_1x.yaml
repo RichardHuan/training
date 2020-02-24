@@ -42,6 +42,7 @@ SOLVER:
   WEIGHT_DECAY: 0.0001
   STEPS: (60000, 80000)
   MAX_ITER: 90000
+  #CHECKPOINT_PERIOD: 100
 #SSY start
 #PER_EPOCH_EVAL: True
 # /root/ssy/training/object_detection/pytorch/maskrcnn_benchmark/config/defaults.py
@@ -49,3 +50,4 @@ SOLVER:
 #  MIN_BBOX_MAP: 0.377
 #  MIN_SEGM_MAP: 0.339
 #SSY end
+#SAVE_CHECKPOINTS: True

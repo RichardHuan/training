@@ -173,8 +173,9 @@ def train(cfg, local_rank, distributed):
         cfg, model, optimizer, scheduler, output_dir, save_to_disk
     )
     # no such SAVE_CHECKPOINTS
+    # maskrcnn_benchmark/engine/trainer.py will use save_checkpoints 
     #arguments["save_checkpoints"] = cfg.SAVE_CHECKPOINTS
-    arguments["save_checkpoints"] = False
+    arguments["save_checkpoints"] = True
 
     extra_checkpoint_data = checkpointer.load(cfg.MODEL.WEIGHT)
     arguments.update(extra_checkpoint_data)
@@ -189,7 +190,9 @@ def train(cfg, local_rank, distributed):
     #print("SSY iters_per_epoch change to 100 ")
     #iters_per_epoch = 100
 
-    checkpoint_period = cfg.SOLVER.CHECKPOINT_PERIOD
+    #checkpoint_period = cfg.SOLVER.CHECKPOINT_PERIOD
+    checkpoint_period = iters_per_epoch
+    #checkpoint_period =100 
 
     # set the callback function to evaluate and potentially
     # early exit each epoch

@@ -20,9 +20,24 @@ gnuplot -p -e  '
   plot 
     0.749                                          axis x1y2  title "target 0.749", 
     "a11_fp32_rmModeldie_v100.p"    u 1:2 w linesp axis x1y2  title "FP32 Accuracy" , 
-    "cuda_bf16cut_1.p"              u 1:2 w linesp axis x1y2  title "BF16 Accuracy" ,
     "bf16_3dir_1.p"                 u 1:2 w linesp axis x1y2  title "BF16 3 dir Accuracy" ,
     "a11_fp32_rmModeldie_v100.loss" u 1:2          axis x1y1  title "FP32 Loss" , 
-    "cuda_bf16cut_1.loss"           u 1:2          axis x1y1  title "BF16 Loss" ,
     "bf16_3dir_1.loss"              u 1:2          axis x1y1  title "BF16 3 dir Loss"
 '
+#gnuplot -p -e  '
+#  set xlabel "Steps";
+#  set ylabel "Loss";
+#  set y2label "Accuracy" ;
+#  set key top left; 
+#  set ytics nomirror;
+#  set y2tics 0.35,0.05,0.8;
+#  set y2range [0.35:0.8];
+#  plot 
+#    0.749                                          axis x1y2  title "target 0.749", 
+#    "a11_fp32_rmModeldie_v100.p"    u 1:2 w linesp axis x1y2  title "FP32 Accuracy" , 
+#    "cuda_bf16cut_1.p"              u 1:2 w linesp axis x1y2  title "BF16 Accuracy" ,
+#    "bf16_3dir_1.p"                 u 1:2 w linesp axis x1y2  title "BF16 3 dir Accuracy" ,
+#    "a11_fp32_rmModeldie_v100.loss" u 1:2          axis x1y1  title "FP32 Loss" , 
+#    "cuda_bf16cut_1.loss"           u 1:2          axis x1y1  title "BF16 Loss" ,
+#    "bf16_3dir_1.loss"              u 1:2          axis x1y1  title "BF16 3 dir Loss"
+#'

@@ -1,2 +1,0 @@
-gnuplot -p -e 'set xrange [:4];set key bottom right;set xlabel "Epoch";set ylabel "Accuracy";plot 21.8 title "target" , "a1_fp32_v100" u 1:2 w linesp, "a2_bf16_v100" u 1:2 w linesp, "a3_fp32_base25_v100" u 1:2 w linesp, "a6_fp32_base25_epoch20_v100" u 1:2 w linesp, "a7_bf16_base25_epoch20_v100" u 1:2 w linesp , "a8_bf12_base25_epoch20_v100" u 1:2 w linesp , "a10_bf10_base25_epoch20_v100" u 1:2 w linesp , "a11_bf9_base25_epoch20_v100" u 1:2 w linesp'
-
