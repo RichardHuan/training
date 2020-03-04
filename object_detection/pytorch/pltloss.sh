@@ -20,9 +20,6 @@ gnuplot -p -e '
   plot 
     0.339                             axis x1y2 title "SEGM mAP target", 
     "fp32_1.map"       u 1:3 w linesp axis x1y2 title "FP32 SEGM mAP"      lc 1 pt 1, 
-    "fp32_1.loss"      u 1:2          axis x1y1 title "FP32 loss"          lc 1 pt 1, 
-    "bf16_1.map"       u 1:3 w linesp axis x1y2 title "BF16 SEGM mAP"      lc 2 pt 2, 
-    "bf16_1.loss"      u 1:2          axis x1y1 title "BF16 loss"          lc 2 pt 2,
     "bf16_3dir_1.map"  u 1:3 w linesp axis x1y2 title "BF12 3dir SEGM mAP" lc 3 pt 3, 
     "bf10_3dir_1.map"  u 1:3 w linesp axis x1y2 title "BF10 3dir SEGM mAP" lc 4 pt 4
 '

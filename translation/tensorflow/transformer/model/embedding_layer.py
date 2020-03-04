@@ -37,7 +37,9 @@ class EmbeddingSharedWeights(tf.layers.Layer):
 
   def __init__(self, vocab_size, hidden_size):
     super(EmbeddingSharedWeights, self).__init__()
+    # transformer/model/model_params.py  32768
     self.vocab_size = vocab_size
+    # 512
     self.hidden_size = hidden_size
 
   def build(self, _):
@@ -50,6 +52,7 @@ class EmbeddingSharedWeights(tf.layers.Layer):
             "vocab_size": self.vocab_size,
             "hidden_size": self.hidden_size
           })
+      # this embedding is not that large
       self.shared_weights = tf.get_variable(
           "weights", [self.vocab_size, self.hidden_size],
           initializer=tf.random_normal_initializer(
@@ -68,9 +71,11 @@ class EmbeddingSharedWeights(tf.layers.Layer):
         locations of the padding tokens in x.
     """
     with tf.name_scope("embedding"):
+      # SSY 1 accessing embeddings
       embeddings = tf.gather(self.shared_weights, x)
 
       # Scale embedding by the sqrt of the hidden size
+      # SSY 2 scaling embeddings
       embeddings *= self.hidden_size ** 0.5
 
       # Create binary array of size [batch_size, length]
