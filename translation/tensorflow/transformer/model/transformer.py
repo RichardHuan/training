@@ -59,8 +59,10 @@ class Transformer(object):
     """
     self.train = train
     self.params = params
-    # SSY 1  transformer/model/embedding_layer.py transform the input words into one hot
-    # SSY vocab_size and hidden_size come from transformer/model/model_params.py
+    # SSY 1  transformer/model/embedding_layer.py transform each input word into emb vector 
+    # SSY vocab_size 33708 and hidden_size 512 come from transformer/model/model_params.py
+    # input to this emb layer is of [batch size , seq length]
+    # output is [batch size , seq length , emb dim]
     self.embedding_softmax_layer = embedding_layer.EmbeddingSharedWeights(
         params.vocab_size, params.hidden_size)
     # SSY 2 see below only matmul and Dense
