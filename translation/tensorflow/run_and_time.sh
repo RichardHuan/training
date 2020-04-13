@@ -1,5 +1,12 @@
 #/bin/bash
 
+
+
+# transformer/transformer_main.py
+# ./transformer/model/transformer.py
+# transformer/model/attention_layer.py
+# /usr/local/lib/python3.5/dist-packages/tensorflow_estimator/python/estimator/estimator.py
+
 # This script runs preprocessing on the downloaded data
 # and times (exlcusively) training to the target accuracy.
 
@@ -38,6 +45,7 @@ echo "STARTING TIMING RUN AT ${START_FMT}"
 
 
 echo "Running benchmark with seed ${SEED}"
+# SSY
 . run_training.sh ${SEED} ${TARGET_UNCASED_BLEU_SCORE}
 
 RET_CODE=$?; if [[ ${RET_CODE} != 0 ]]; then exit ${RET_CODE}; fi

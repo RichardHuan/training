@@ -59,7 +59,8 @@ class Transformer(object):
     """
     self.train = train
     self.params = params
-    # SSY 1  transformer/model/embedding_layer.py
+    # SSY 1  transformer/model/embedding_layer.py transform the input words into one hot
+    # SSY vocab_size and hidden_size come from transformer/model/model_params.py
     self.embedding_softmax_layer = embedding_layer.EmbeddingSharedWeights(
         params.vocab_size, params.hidden_size)
     # SSY 2 see below only matmul and Dense
@@ -100,6 +101,7 @@ class Transformer(object):
       # Generate output sequence if targets is None, or return logits if target
       # sequence is known.
       if targets is None:
+        # SSY _get_symbols_to_logits_fn do have instance a decoder stack with cache 
         return self.predict(encoder_outputs, attention_bias)
       else:
         logits = self.decode(targets, encoder_outputs, attention_bias)
@@ -123,6 +125,7 @@ class Transformer(object):
 
       with tf.name_scope("add_pos_encoding"):
         length = tf.shape(embedded_inputs)[1]
+        # SSY the const positional embedding
         pos_encoding = model_utils.get_position_encoding(
             length, self.params.hidden_size)
         encoder_inputs = embedded_inputs + pos_encoding
@@ -133,7 +136,7 @@ class Transformer(object):
             value=self.params.layer_postprocess_dropout)
         encoder_inputs = tf.nn.dropout(
             encoder_inputs, 1 - self.params.layer_postprocess_dropout)
-
+      # SSY applying encoder creadte in EncoderStack
       return self.encoder_stack(encoder_inputs, attention_bias, inputs_padding)
 
   def decode(self, targets, encoder_outputs, attention_bias):
@@ -221,7 +224,7 @@ class Transformer(object):
     batch_size = tf.shape(encoder_outputs)[0]
     input_length = tf.shape(encoder_outputs)[1]
     max_decode_length = input_length + self.params.extra_decode_length
-
+    # SSY symbols_to_logits_fn used in beam search
     symbols_to_logits_fn = self._get_symbols_to_logits_fn(max_decode_length)
 
     # Create initial set of IDs that will be passed into symbols_to_logits_fn.
@@ -329,8 +332,10 @@ class EncoderStack(tf.layers.Layer):
     mlperf_log.transformer_print(
         key=mlperf_log.MODEL_HP_NUM_HIDDEN_LAYERS,
         value=params.num_hidden_layers)
+    # SSY num_hidden_layers is 6 transformer/model/model_params.py
     for _ in range(params.num_hidden_layers):
       # Create sublayers for each layer.
+      # only SelfAttention and ffn
       # SSY 2.1  transformer/model/attention_layer.py Dense and matmul
       self_attention_layer = attention_layer.SelfAttention(
           params.hidden_size, params.num_heads, params.attention_dropout, train)
@@ -353,6 +358,7 @@ class EncoderStack(tf.layers.Layer):
 
       with tf.variable_scope("layer_%d" % n):
         with tf.variable_scope("self_attention"):
+          # SSY encoder dont have cache , but decode do have cache
           encoder_inputs = self_attention_layer(encoder_inputs, attention_bias)
         with tf.variable_scope("ffn"):
           encoder_inputs = feed_forward_network(encoder_inputs, inputs_padding)
@@ -407,9 +413,11 @@ class DecoderStack(tf.layers.Layer):
       layer_cache = cache[layer_name] if cache is not None else None
       with tf.variable_scope(layer_name):
         with tf.variable_scope("self_attention"):
+          # SSY decoder self attention do have cache
           decoder_inputs = self_attention_layer(
               decoder_inputs, decoder_self_attention_bias, cache=layer_cache)
         with tf.variable_scope("encdec_attention"):
+          # SSY decoder non self attention not have cache
           decoder_inputs = enc_dec_attention_layer(
               decoder_inputs, encoder_outputs, attention_bias)
         with tf.variable_scope("ffn"):

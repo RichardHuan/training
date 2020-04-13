@@ -272,6 +272,8 @@ def train_schedule(
 
     # Train the model for single_iteration_train_steps or until the input fn
     # runs out of examples (if single_iteration_train_steps is None).
+    # SSY dataset.train_input_fn transformer/utils/dataset.py
+    # SSY estimator.train /usr/local/lib/python3.5/dist-packages/tensorflow_estimator/python/estimator/estimator.py
     estimator.train(dataset.train_input_fn, steps=single_iteration_train_steps)
 
     mlperf_log.transformer_print(key=mlperf_log.EVAL_START)
@@ -310,6 +312,7 @@ def main(_):
   if FLAGS.params == "base":
     params = model_params.TransformerBaseParams
   elif FLAGS.params == "big":
+    # SSY transformer/model/model_params.py
     params = model_params.TransformerBigParams
   else:
     raise ValueError("Invalid parameter set defined: %s."
@@ -342,9 +345,11 @@ def main(_):
   params.num_cpu_cores = FLAGS.num_cpu_cores
   params.epochs_between_eval = FLAGS.epochs_between_eval
   params.repeat_dataset = single_iteration_train_epochs
-
+  # SSY already have parameter and model function here
   estimator = tf.estimator.Estimator(
       model_fn=model_fn, model_dir=FLAGS.model_dir, params=params)
+  # this contains input_fn
+  # SSY the main training loop
   train_schedule(
       estimator, train_eval_iterations, single_iteration_train_steps,
       single_iteration_train_epochs, FLAGS.bleu_source, FLAGS.bleu_ref,

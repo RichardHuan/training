@@ -39,7 +39,7 @@ class EmbeddingSharedWeights(tf.layers.Layer):
     super(EmbeddingSharedWeights, self).__init__()
     # transformer/model/model_params.py  32768
     self.vocab_size = vocab_size
-    # 512
+    # 512 for standard, 1024 for big
     self.hidden_size = hidden_size
 
   def build(self, _):

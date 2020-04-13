@@ -207,6 +207,8 @@ def _read_and_batch_from_files(
   Returns:
     tf.data.Dataset object containing examples loaded from the files.
   """
+  # SSY
+  print("SSY _read_and_batch_from_files")
   dataset = tf.data.Dataset.list_files(file_pattern)
 
   if shuffle:

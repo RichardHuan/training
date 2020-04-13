@@ -47,6 +47,7 @@ class Attention(tf.layers.Layer):
     # Layers for linearly projecting the queries, keys, and values.
     use_bias = False
     # SSY /usr/local/lib/python3.5/dist-packages/tensorflow_core/python/keras/layers/core.py
+    # these are the input linear for v k and q
     self.q_dense_layer = tf.layers.Dense(hidden_size, use_bias=use_bias, name="q")
     self.k_dense_layer = tf.layers.Dense(hidden_size, use_bias=use_bias, name="k")
     self.v_dense_layer = tf.layers.Dense(hidden_size, use_bias=use_bias, name="v")
@@ -78,12 +79,16 @@ class Attention(tf.layers.Layer):
       length = tf.shape(x)[1]
 
       # Calculate depth of last dimension after it has been split.
+      # SSY floor division 
+      # SSY yes I know that ** is exp, but this is not log
       depth = (self.hidden_size // self.num_heads)
 
       # Split the last dimension
+      # SSY split it on last dim
       x = tf.reshape(x, [batch_size, length, self.num_heads, depth])
 
       # Transpose the result
+      # SSY and then move the num_heads to the second dim 
       return tf.transpose(x, [0, 2, 1, 3])
 
   def combine_heads(self, x):
@@ -100,7 +105,7 @@ class Attention(tf.layers.Layer):
       length = tf.shape(x)[2]
       x = tf.transpose(x, [0, 2, 1, 3])  # --> [batch, length, num_heads, depth]
       return tf.reshape(x, [batch_size, length, self.hidden_size])
-
+  # SSY this call function seems to server as dynamic graph
   def call(self, x, y, bias, cache=None):
     """Apply attention mechanism to x and y.
 
@@ -121,12 +126,16 @@ class Attention(tf.layers.Layer):
     # learned projections. This is in preparation of splitting them into
     # multiple heads. Multi-head attention uses multiple queries, keys, and
     # values rather than regular attention (which uses a single q, k, v).
+    # SSY notice that k and v already use the same y for Attention
+    # while for SelfAttention they are all x
     q = self.q_dense_layer(x)
     k = self.k_dense_layer(y)
     v = self.v_dense_layer(y)
-
+    # SSY this cache come from outside in ./transformer/model/transformer.py 
+    # SSY predict and  decode
     if cache is not None:
       # Combine cached keys and values with new keys and values.
+      # SSY ./transformer/model/transformer.py only decoder self attention have cache
       k = tf.concat([cache["k"], k], axis=1)
       v = tf.concat([cache["v"], v], axis=1)
 
@@ -135,6 +144,7 @@ class Attention(tf.layers.Layer):
       cache["v"] = v
 
     # Split q, k, v into heads.
+    # SSY the created qkv are splited to multiple header
     q = self.split_heads(q)
     k = self.split_heads(k)
     v = self.split_heads(v)
@@ -176,9 +186,11 @@ class Attention(tf.layers.Layer):
     attention_output = self.output_dense_layer(attention_output)
     return attention_output
 
-# SSY see above
+# SSY see above it is the same as Attention?
+# actually its two input for call are all x
 class SelfAttention(Attention):
   """Multiheaded self-attention layer."""
 
   def call(self, x, bias, cache=None):
+    # SSY two inputs are all x, this is only for SelfAttention
     return super(SelfAttention, self).call(x, x, bias, cache)
