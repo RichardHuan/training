@@ -80,9 +80,13 @@ def _parse_example(serialized_example):
       "inputs": tf.VarLenFeature(tf.int64),
       "targets": tf.VarLenFeature(tf.int64)
   }
+  print("serialized_example {}".format(serialized_example))
   parsed = tf.parse_single_example(serialized_example, data_fields)
+  print("parsed {}".format(parsed))
   inputs = tf.sparse_tensor_to_dense(parsed["inputs"])
+  print("inputs {}".format(inputs))
   targets = tf.sparse_tensor_to_dense(parsed["targets"])
+  print("targets {}".format(targets))
   return inputs, targets
 
 
@@ -209,21 +213,30 @@ def _read_and_batch_from_files(
   """
   # SSY
   print("SSY _read_and_batch_from_files")
+  # /usr/local/lib/python3.5/dist-packages/tensorflow_core/python/data/ops/dataset_ops.py
   dataset = tf.data.Dataset.list_files(file_pattern)
+  # DatasetV1Adapter
+  print("dataset type {}".format(type(dataset)))
 
   if shuffle:
     # Shuffle filenames
     mlperf_log.transformer_print(key=mlperf_log.INPUT_ORDER)
+    # SSY actually list_files above can also shuffle
+    # /usr/local/lib/python3.5/dist-packages/tensorflow_core/python/data/ops/dataset_ops.py
+    # shuffle the data set randomly
     dataset = dataset.shuffle(buffer_size=_FILE_SHUFFLE_BUFFER)
 
   # Read files and interleave results. When training, the order of the examples
   # will be non-deterministic.
+  # SSY dataset.apply /usr/local/lib/python3.5/dist-packages/tensorflow_core/python/data/ops/dataset_ops.py
+  # SSY tf.contrib.data.parallel_interleave /usr/local/lib/python3.5/dist-packages/tensorflow_core/contrib/data/python/ops/interleave_ops.py
   dataset = dataset.apply(
       tf.contrib.data.parallel_interleave(
           _load_records, sloppy=shuffle, cycle_length=num_cpu_cores))
 
   # Parse each tf.Example into a dictionary
   # TODO: Look into prefetch_input_elements for performance optimization.
+  # SSY dataset.map /usr/local/lib/python3.5/dist-packages/tensorflow_core/python/data/ops/dataset_ops.py
   dataset = dataset.map(_parse_example,
                         num_parallel_calls=num_cpu_cores)
 
@@ -239,13 +252,17 @@ def _read_and_batch_from_files(
   dataset = dataset.repeat(repeat)
 
   # Prefetch the next element to improve speed of input pipeline.
+  # SSY niubility!!! prefetch
   dataset = dataset.prefetch(1)
+  # SSY only return dataset
   return dataset
 
 
 def train_input_fn(params):
   """Load and return dataset of batched examples for use during training."""
   file_pattern = os.path.join(getattr(params, "data_dir", ""), "*encoded-train*")
+  print("file_pattern {}".format(file_pattern))
+  # file_pattern looks like processed_data/*encoded-train*
   return _read_and_batch_from_files(
       file_pattern, params.batch_size, params.max_length, params.num_cpu_cores,
       shuffle=True, repeat=params.repeat_dataset)

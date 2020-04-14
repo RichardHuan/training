@@ -12,6 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
+
+# SSY
+# transformer/transformer_main.py train_schedule
+# transformer/model/transformer.py model definition
+# transformer/model/attention_layer.py attention layer
+# transformer/utils/dataset.py dataset.train_input_fn
+# /usr/local/lib/python3.5/dist-packages/tensorflow_estimator/python/estimator/estimator.py train  _train_model _train_model_default _train_with_estimator_spec
+# /usr/local/lib/python3.5/dist-packages/tensorflow_estimator/python/estimator/util.py
+# /usr/local/lib/python3.5/dist-packages/tensorflow_core/python/data/ops/dataset_ops.py
+
 """Creates an estimator to train the Transformer model."""
 
 from __future__ import absolute_import
@@ -45,7 +55,7 @@ DEFAULT_TRAIN_EPOCHS = 10
 BLEU_DIR = "bleu"
 INF = 10000
 
-
+# SSY this feature is returnd from /usr/local/lib/python3.5/dist-packages/tensorflow_estimator/python/estimator/estimator.py _get_features_and_labels_from_input_fn by calling  dataset.train_input_fn in  transformer/utils/dataset.py
 def model_fn(features, labels, mode, params):
   """Defines how to train, evaluate and predict from the transformer model."""
   with tf.variable_scope("model"):

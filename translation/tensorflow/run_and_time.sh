@@ -2,12 +2,6 @@
 
 
 
-# transformer/transformer_main.py train_schedule
-# transformer/model/transformer.py
-# transformer/model/attention_layer.py
-# transformer/utils/dataset.py dataset.train_input_fn
-# /usr/local/lib/python3.5/dist-packages/tensorflow_estimator/python/estimator/estimator.py estimator.train
-# /usr/local/lib/python3.5/dist-packages/tensorflow_estimator/python/estimator/util.py
 
 # This script runs preprocessing on the downloaded data
 # and times (exlcusively) training to the target accuracy.
