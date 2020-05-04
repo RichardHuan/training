@@ -1,19 +1,44 @@
 # BF16 training convergence
-Mnist
-<img src="https://github.com/shengyushen/training/blob/master/mnist/mnist.png">
+
+
+Mnist 
+
+
+<img src="https://github.com/shengyushen/training/blob/master/mnist/mnist.png" />
+
+
 Resnet
+
+
 <img src="https://github.com/shengyushen/training/blob/master/image_classification/tensorflow/resnet.png">
+
+
+
 MaskRCNN
+
+
+
 <img src="https://github.com/shengyushen/training/blob/master/object_detection/pytorch/maskrcnn.png">
+
 NCF
+
 <img src="https://github.com/shengyushen/training/blob/master/recommendation/pytorch/ncf.png">
+
 MiniGo
+
 <img src="https://github.com/shengyushen/training/blob/master/reinforcement/tensorflow/minigo.png">
+
+
 GNMT
+
 <img src="https://github.com/shengyushen/training/blob/master/rnn_translator/pytorch/gnmt.png">
+
 SSD
+
 <img src="https://github.com/shengyushen/training/blob/master/single_stage_detector/ssd/ssd.png">
+
 BERT
+
 <img src="https://github.com/shengyushen/training/blob/master/translation/tensorflow/bert.png">
 
 
