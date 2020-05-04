@@ -14,5 +14,4 @@ LICENSE
 .dockerignore
 *.egg
 *.egg-info
-*.png
 run.log.1
