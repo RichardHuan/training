@@ -81,12 +81,14 @@ def _parse_example(serialized_example):
       "targets": tf.VarLenFeature(tf.int64)
   }
   print("serialized_example {}".format(serialized_example))
+  # SSY /usr/local/lib/python3.5/dist-packages/tensorflow_core/python/ops/parsing_ops.py
   parsed = tf.parse_single_example(serialized_example, data_fields)
   print("parsed {}".format(parsed))
   inputs = tf.sparse_tensor_to_dense(parsed["inputs"])
   print("inputs {}".format(inputs))
   targets = tf.sparse_tensor_to_dense(parsed["targets"])
-  print("targets {}".format(targets))
+  print("targets type  {}".format(type(targets)))
+  print("targets {}".format(as_numpy(targets)))
   return inputs, targets
 
 
@@ -217,6 +219,8 @@ def _read_and_batch_from_files(
   dataset = tf.data.Dataset.list_files(file_pattern)
   # DatasetV1Adapter
   print("dataset type {}".format(type(dataset)))
+  for elem in dataset:
+    print(elem.numpy())
 
   if shuffle:
     # Shuffle filenames
