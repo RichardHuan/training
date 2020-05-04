@@ -2,7 +2,7 @@
 
 Mnist 
 
-<img src="https://github.com/shengyushen/training/blob/master/mnist/mnist.png" />
+<img src="https://github.com/shengyushen/training/blob/master/mnist/mnist.png">
 
 Resnet
 
