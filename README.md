@@ -1,22 +1,14 @@
 # BF16 training convergence
 
-
 Mnist 
-
 
 <img src="https://github.com/shengyushen/training/blob/master/mnist/mnist.png" />
 
-
 Resnet
-
 
 <img src="https://github.com/shengyushen/training/blob/master/image_classification/tensorflow/resnet.png">
 
-
-
 MaskRCNN
-
-
 
 <img src="https://github.com/shengyushen/training/blob/master/object_detection/pytorch/maskrcnn.png">
 
@@ -27,7 +19,6 @@ NCF
 MiniGo
 
 <img src="https://github.com/shengyushen/training/blob/master/reinforcement/tensorflow/minigo.png">
-
 
 GNMT
 
